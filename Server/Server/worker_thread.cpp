@@ -59,6 +59,6 @@ void WorkerThread::RunWorker()
 		result = Iocp::GetCompletionStatus(bytes, ovelapped);
 
 
-		OnWorker();
+		
 	}
 }
