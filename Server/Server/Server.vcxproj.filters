@@ -27,6 +27,12 @@
     <ClInclude Include="iocp.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="tcp_socket.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="client_acceptor.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -39,6 +45,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="iocp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="tcp_socket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="client_acceptor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

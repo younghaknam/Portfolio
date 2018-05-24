@@ -23,13 +23,11 @@ public:
 	Iocp();
 	~Iocp();
 
-	bool Register(HANDLE handle) const;
-	bool PostCompletionStatus(DWORD number_of_bytes, const OverlappedEx& ovelapped);
-
-protected:
 	bool Create();
 	void Close();
+	bool Bind(HANDLE handle) const;
 	bool GetCompletionStatus(DWORD& number_of_bytes, OverlappedEx** ovelapped);
+	bool PostCompletionStatus(DWORD number_of_bytes, const OverlappedEx& ovelapped);
 
 private:
 	HANDLE iocp_handle_;

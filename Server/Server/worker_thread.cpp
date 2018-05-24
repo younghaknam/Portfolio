@@ -1,9 +1,11 @@
 #include "stdafx.h"
+#include "iocp.h"
 #include "worker_thread.h"
 
 WorkerThread::WorkerThread()
 	: stop_(false)
 {
+	iocp_ = shared_ptr<Iocp>(new Iocp);
 }
 
 WorkerThread::~WorkerThread()
@@ -12,7 +14,7 @@ WorkerThread::~WorkerThread()
 
 bool WorkerThread::Start(byte thread_count)
 {
-	if (Iocp::Create() == false)
+	if (iocp_->Create() == false)
 		return false;
 
 	stop_ = false;
@@ -39,7 +41,7 @@ void WorkerThread::Stop()
 
 	stop_ = true;
 
-	Iocp::Close();
+	iocp_->Close();
 
 	for (auto thread_ptr : threads_)
 	{
@@ -49,7 +51,6 @@ void WorkerThread::Stop()
 
 	threads_.clear();
 }
-
 void WorkerThread::RunWorker()
 {
 	DWORD bytes = 0;
@@ -60,7 +61,7 @@ void WorkerThread::RunWorker()
 	{
 		bytes = 0;
 		ovelapped = nullptr;
-		result = Iocp::GetCompletionStatus(bytes, &ovelapped);
+		result = iocp_->GetCompletionStatus(bytes, &ovelapped);
 
 		if (stop_ == true)
 			break;
@@ -77,7 +78,7 @@ void WorkerThread::RunWorker()
 		if (bytes == 0)
 		{
 			if (ovelapped->io_type == kIOAccept)
-				OnAccept(ovelapped->object);
+				OnAccepted(ovelapped->object);
 			else
 				OnDisconnected(ovelapped->object);
 
@@ -85,7 +86,7 @@ void WorkerThread::RunWorker()
 		}
 
 		if (ovelapped->io_type == kIORecv)
-			OnRecv(ovelapped->object, bytes);
+			OnReceived(ovelapped->object, bytes);
 		else if (ovelapped->io_type == kIOSend)
 			OnSend(ovelapped->object, bytes);
 		else
