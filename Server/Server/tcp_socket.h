@@ -6,6 +6,7 @@ public:
 	TcpSocket();
 	~TcpSocket();
 
+	bool RequestAccept(SOCKET listen_socket);
 	void Close();
 
 	void set_socket(SOCKET socket) { socket_ = socket; }

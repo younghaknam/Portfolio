@@ -7,7 +7,6 @@
 ClientAcceptor::ClientAcceptor()
 	: socket_(INVALID_SOCKET)
 	, port_(0)
-	, acceptor_count_(5)
 {
 }
 
@@ -15,19 +14,36 @@ ClientAcceptor::~ClientAcceptor()
 {
 }
 
-bool ClientAcceptor::Start(const wstring& ip, WORD port, int acceptor_count)
+bool ClientAcceptor::Start(const wstring& ip, WORD port)
 {
-	acceptor_count_ = acceptor_count;
 	ip_ = ip;
 	port_ = port;
 
 	if (Listen() == false)
 		return false;
 
+	byte thread_count = 2;
+	if (WorkerThread::Start(thread_count) == false)
+		return false;
+
+	if (:get_iocp()->Bind(reinterpret_cast<HANDLE>(socket_)) == false)
+		return false;
+
 	return true;
 }
 
 void ClientAcceptor::Stop()
+{
+	WorkerThread::Stop();
+
+	if (socket_ == INVALID_SOCKET)
+	{
+		closesocket(socket_);
+		socket_ = INVALID_SOCKET;
+	}
+}
+
+void ClientAcceptor::OnAccepted(const void* object)
 {
 
 }
@@ -68,9 +84,3 @@ bool ClientAcceptor::Listen()
 
 	return true;
 }
-
-void ClientAcceptor::OnAccepted(const void* object)
-{
-
-}
-

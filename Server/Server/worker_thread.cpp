@@ -51,6 +51,7 @@ void WorkerThread::Stop()
 
 	threads_.clear();
 }
+
 void WorkerThread::RunWorker()
 {
 	DWORD bytes = 0;

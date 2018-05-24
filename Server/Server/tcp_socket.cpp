@@ -12,6 +12,18 @@ TcpSocket::~TcpSocket()
 	Close();
 }
 
+bool TcpSocket::RequestAccept(SOCKET listen_socket)
+{
+	if (socket_ != INVALID_SOCKET)
+		return false;
+
+	socket_ = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP, NULL, 0, WSA_FLAG_OVERLAPPED);
+	if (socket_ == INVALID_SOCKET)
+		return false;
+
+
+}
+
 void TcpSocket::Close()
 {
 	if (socket_ == INVALID_SOCKET)
