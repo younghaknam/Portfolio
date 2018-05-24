@@ -49,8 +49,8 @@ void Iocp::Close()
 	}
 }
 
-bool Iocp::GetCompletionStatus(DWORD& number_of_bytes, OverlappedEx& ovelapped)
+bool Iocp::GetCompletionStatus(DWORD& number_of_bytes, OverlappedEx** ovelapped)
 {
 	PULONG_PTR completion_key = nullptr;
-	return GetQueuedCompletionStatus(iocp_handle_, &number_of_bytes, completion_key, reinterpret_cast<OVERLAPPED**>(&ovelapped), INFINITE);
+	return GetQueuedCompletionStatus(iocp_handle_, &number_of_bytes, completion_key, reinterpret_cast<OVERLAPPED**>(ovelapped), INFINITE);
 }

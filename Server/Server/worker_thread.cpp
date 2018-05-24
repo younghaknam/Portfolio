@@ -2,6 +2,7 @@
 #include "worker_thread.h"
 
 WorkerThread::WorkerThread()
+	: stop_(false)
 {
 }
 
@@ -13,6 +14,8 @@ bool WorkerThread::Start(byte thread_count)
 {
 	if (Iocp::Create() == false)
 		return false;
+
+	stop_ = false;
 
 	if (thread_count == 0)
 	{
@@ -34,6 +37,8 @@ void WorkerThread::Stop()
 	if (threads_.size() == 0)
 		return;
 
+	stop_ = true;
+
 	Iocp::Close();
 
 	for (auto thread_ptr : threads_)
@@ -47,18 +52,43 @@ void WorkerThread::Stop()
 
 void WorkerThread::RunWorker()
 {
-	bool result = false;
 	DWORD bytes = 0;
-	OverlappedEx ovelapped;
+	OverlappedEx* ovelapped = nullptr;
+	bool result = false;
 
 	while (true)
 	{
 		bytes = 0;
-		ovelapped.Initialize();
+		ovelapped = nullptr;
+		result = Iocp::GetCompletionStatus(bytes, &ovelapped);
 
-		result = Iocp::GetCompletionStatus(bytes, ovelapped);
+		if (stop_ == true)
+			break;
 
+		if (ovelapped == nullptr || ovelapped->object == nullptr)
+			continue;
 
-		
+		if (result == false)
+		{
+			OnDisconnected(ovelapped->object);
+			continue;
+		}
+
+		if (bytes == 0)
+		{
+			if (ovelapped->io_type == kIOAccept)
+				OnAccept(ovelapped->object);
+			else
+				OnDisconnected(ovelapped->object);
+
+			continue;
+		}
+
+		if (ovelapped->io_type == kIORecv)
+			OnRecv(ovelapped->object, bytes);
+		else if (ovelapped->io_type == kIOSend)
+			OnSend(ovelapped->object, bytes);
+		else
+			OnDisconnected(ovelapped->object);
 	}
 }

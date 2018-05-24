@@ -14,9 +14,11 @@ public:
 	void RunWorker();
 	virtual void OnAccept(const void* object) = 0;
 	virtual void OnConnect(const void* object) = 0;
+	virtual void OnDisconnected(const void* object) = 0;
 	virtual void OnRecv(const void* object, const DWORD bytes) = 0;
 	virtual void OnSend(const void* object, const DWORD bytes) = 0;
 
 private:
 	vector<shared_ptr<thread>> threads_;
+	bool stop_;
 };

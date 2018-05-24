@@ -29,7 +29,7 @@ public:
 protected:
 	bool Create();
 	void Close();
-	bool GetCompletionStatus(DWORD& number_of_bytes, OverlappedEx& ovelapped);
+	bool GetCompletionStatus(DWORD& number_of_bytes, OverlappedEx** ovelapped);
 
 private:
 	HANDLE iocp_handle_;
