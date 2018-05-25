@@ -1,5 +1,7 @@
 #pragma once
 
+const int kAddressBufferSize = 1024;
+
 class TcpSocket
 {
 public:
@@ -20,4 +22,6 @@ private:
 	SOCKET socket_;
 	wstring ip_;
 	WORD port_;
+	UINT8 address_buffer_[kAddressBufferSize];
+	OverlappedEx accept_overlapped_;
 };

@@ -1,7 +1,6 @@
 #pragma once
 
 class WorkerThread;
-class TcpSocket;
 
 class ClientAcceptor : public WorkerThread
 {
@@ -11,6 +10,8 @@ public:
 
 	bool Start(const wstring& ip, WORD port);
 	void Stop();
+
+	const SOCKET get_socket() { return socket_; }
 
 protected:
 	virtual void OnAccepted(const void* object);
@@ -25,5 +26,4 @@ private:
 	SOCKET socket_;
 	wstring ip_;
 	WORD port_;
-	vector<shared_ptr<TcpSocket>> sockets_;
 };

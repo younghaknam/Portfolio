@@ -6,7 +6,7 @@ class WorkerThread
 {
 public:
 	WorkerThread();
-	~WorkerThread();
+	virtual ~WorkerThread();
 
 protected:
 	bool Start(byte thread_count = 0);

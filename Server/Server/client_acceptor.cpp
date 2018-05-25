@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "iocp.h"
 #include "worker_thread.h"
-#include "tcp_socket.h"
 #include "client_acceptor.h"
 
 ClientAcceptor::ClientAcceptor()
@@ -26,7 +25,7 @@ bool ClientAcceptor::Start(const wstring& ip, WORD port)
 	if (WorkerThread::Start(thread_count) == false)
 		return false;
 
-	if (:get_iocp()->Bind(reinterpret_cast<HANDLE>(socket_)) == false)
+	if (get_iocp()->Bind(reinterpret_cast<HANDLE>(socket_)) == false)
 		return false;
 
 	return true;
@@ -36,7 +35,7 @@ void ClientAcceptor::Stop()
 {
 	WorkerThread::Stop();
 
-	if (socket_ == INVALID_SOCKET)
+	if (socket_ != INVALID_SOCKET)
 	{
 		closesocket(socket_);
 		socket_ = INVALID_SOCKET;
@@ -45,7 +44,8 @@ void ClientAcceptor::Stop()
 
 void ClientAcceptor::OnAccepted(const void* object)
 {
-
+	if (object == nullptr)
+		return	;
 }
 
 bool ClientAcceptor::Listen()
