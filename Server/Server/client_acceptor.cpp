@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "inetwork_event.h"
 #include "iocp.h"
 #include "worker_thread.h"
 #include "client_acceptor.h"
@@ -6,6 +7,7 @@
 ClientAcceptor::ClientAcceptor()
 	: socket_(INVALID_SOCKET)
 	, port_(0)
+	, network_event_(nullptr)
 {
 }
 
@@ -13,13 +15,15 @@ ClientAcceptor::~ClientAcceptor()
 {
 }
 
-bool ClientAcceptor::Start(const wstring& ip, WORD port)
+bool ClientAcceptor::Start(const wstring& ip, WORD port, const shared_ptr<iNetworkEvent>& network_event)
 {
 	ip_ = ip;
 	port_ = port;
 
 	if (Listen() == false)
 		return false;
+
+	network_event_ = network_event;
 
 	byte thread_count = 2;
 	if (WorkerThread::Start(thread_count) == false)
@@ -42,10 +46,12 @@ void ClientAcceptor::Stop()
 	}
 }
 
-void ClientAcceptor::OnAccepted(const void* object)
+void ClientAcceptor::OnAccepted(const void* packet)
 {
-	if (object == nullptr)
+	if (packet == nullptr)
 		return	;
+
+	network_event_->OnAccepted(packet);
 }
 
 bool ClientAcceptor::Listen()

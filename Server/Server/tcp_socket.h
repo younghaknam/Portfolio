@@ -2,13 +2,15 @@
 
 const static int kAddressBufferSize = 1024;
 
+class Packet;
+
 class TcpSocket
 {
 public:
 	TcpSocket();
 	~TcpSocket();
 
-	bool RequestAccept(SOCKET listen_socket);
+	bool RequestAccept(SOCKET listen_socket, shared_ptr<Packet>& packet);
 	void Close();
 
 	void set_socket(SOCKET socket) { socket_ = socket; }
@@ -22,6 +24,4 @@ private:
 	SOCKET socket_;
 	wstring ip_;
 	WORD port_;
-	UINT8 address_buffer_[kAddressBufferSize];
-	OverlappedEx accept_overlapped_;
 };

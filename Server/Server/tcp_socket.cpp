@@ -1,14 +1,15 @@
 #include "stdafx.h"
 #include <Mswsock.h>
 #include "iocp.h"
+#include "protocol_def.h"
+#include "packet_def.h"
+#include "packet.h"
 #include "tcp_socket.h"
 
 TcpSocket::TcpSocket()
 	: socket_(INVALID_SOCKET)
 	, port_(0)
 {
-	memset(address_buffer_, 0x00, kAddressBufferSize);
-	accept_overlapped_.Initialize();
 }
 
 TcpSocket::~TcpSocket()
@@ -16,7 +17,7 @@ TcpSocket::~TcpSocket()
 	Close();
 }
 
-bool TcpSocket::RequestAccept(SOCKET listen_socket)
+bool TcpSocket::RequestAccept(SOCKET listen_socket, shared_ptr<Packet>& packet)
 {
 	if (socket_ != INVALID_SOCKET)
 		return false;
@@ -25,14 +26,11 @@ bool TcpSocket::RequestAccept(SOCKET listen_socket)
 	if (socket_ == INVALID_SOCKET)
 		return false;
 
-	accept_overlapped_.Initialize();
-	accept_overlapped_.io_type = kIOAccept;
-	accept_overlapped_.packet = this;
+	packet->get_overlapped()->io_type = kIOAccept;
 
-	memset(address_buffer_, 0x00, kAddressBufferSize);
 	DWORD	bytes = 0;
-	bool result = AcceptEx(listen_socket, socket_, address_buffer_, kAddressBufferSize - ((sizeof(sockaddr_in) + 16) * 2),
-								sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16,	&bytes, &accept_overlapped_);
+	bool result = AcceptEx(listen_socket, socket_, packet->get_memory(), kAddressBufferSize - ((sizeof(sockaddr_in) + 16) * 2),
+								sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16,	&bytes, packet->get_overlapped());
 	if (result == false)
 	{
 		if (WSAGetLastError() != ERROR_IO_PENDING)

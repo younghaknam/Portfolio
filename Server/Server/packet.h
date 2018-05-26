@@ -11,10 +11,11 @@ public:
 	bool SetData(const void* data, WORD size);
 	bool GetData(void* data, WORD size);
 
+	UINT8* get_memory() { return memory_; }
 	void SetClientSerial(WORD serial) { overlapped_.client_serial = serial; }
 	void SetRequestRecvSize() { overlapped_.wsa_buf.len = kPacketMemorySize; }
 	const PacketHeader* get_header() { return header_; }
-	const OverlappedEx* get_overlapped() { return &overlapped_; }
+	OverlappedEx* get_overlapped() { return &overlapped_; }
 
 private:
 	UINT8 memory_[kPacketMemorySize];

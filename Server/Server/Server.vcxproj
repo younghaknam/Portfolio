@@ -150,12 +150,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="client_acceptor.h" />
+    <ClInclude Include="client_io_worker.h" />
     <ClInclude Include="client_manager.h" />
     <ClInclude Include="iocp.h" />
-    <ClInclude Include="i_network_event.h" />
+    <ClInclude Include="inetwork_event.h" />
     <ClInclude Include="packet.h" />
     <ClInclude Include="packet_def.h" />
     <ClInclude Include="packet_pool.h" />
+    <ClInclude Include="packet_storage.h" />
     <ClInclude Include="protocol_def.h" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="stdafx.h" />
@@ -166,10 +168,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client_acceptor.cpp" />
+    <ClCompile Include="client_io_worker.cpp" />
     <ClCompile Include="client_manager.cpp" />
     <ClCompile Include="iocp.cpp" />
     <ClCompile Include="packet.cpp" />
     <ClCompile Include="packet_pool.cpp" />
+    <ClCompile Include="packet_storage.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
