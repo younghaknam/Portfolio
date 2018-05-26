@@ -27,5 +27,5 @@ bool Client::RequestAccept(SOCKET listen_socket)
 {
 	auto packet = PacketStorage::GetSingleton()->GetPacket();
 	packet->Initialize();
-	return socket_.RequestAccept(listen_socket, packet);
+	return tcp_socket_.RequestAccept(listen_socket, packet);
 }

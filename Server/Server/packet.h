@@ -12,7 +12,8 @@ public:
 	bool GetData(void* data, WORD size);
 
 	UINT8* get_memory() { return memory_; }
-	void SetClientSerial(WORD serial) { overlapped_.client_serial = serial; }
+	void set_client_serial(WORD serial) { client_serial = serial; }
+	WORD get_client_serial() { return client_serial; }
 	void SetRequestRecvSize() { overlapped_.wsa_buf.len = kPacketMemorySize; }
 	const PacketHeader* get_header() { return header_; }
 	OverlappedEx* get_overlapped() { return &overlapped_; }
@@ -21,5 +22,6 @@ private:
 	UINT8 memory_[kPacketMemorySize];
 	PacketHeader* header_;
 	UINT8* data_;
+	WORD client_serial;
 	OverlappedEx overlapped_;
 };

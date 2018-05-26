@@ -2,6 +2,7 @@
 
 class iNetworkEvent;
 class Client;
+class Iocp;
 
 class ClientManager : public iNetworkEvent
 {
@@ -9,7 +10,8 @@ public:
 	ClientManager();
 	~ClientManager();
 
-	bool Start(WORD client_count, SOCKET listen_socket);
+	void Initialize(SOCKET listen_socket, const shared_ptr<Iocp>& io_iocp);
+	bool Start(WORD client_count);
 	void Stop();
 
 	virtual void OnAccepted(const void* packet);
@@ -20,6 +22,6 @@ public:
 private:
 	WORD client_count_;
 	SOCKET listen_socket_;
+	shared_ptr<Iocp> io_iocp_;
 	vector<shared_ptr<Client>> clients_;
 };
-

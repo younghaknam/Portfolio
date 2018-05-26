@@ -14,7 +14,6 @@ struct OverlappedEx : WSAOVERLAPPED
 	WSABUF wsa_buf;
 	IoType io_type;
 	void* packet;
-	WORD client_serial;
 
 	void Initialize() { memset(this, 0x00, sizeof(OverlappedEx)); }
 };

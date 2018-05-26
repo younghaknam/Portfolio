@@ -8,6 +8,8 @@ public:
 	WorkerThread();
 	virtual ~WorkerThread();
 
+	const shared_ptr<Iocp>& get_iocp() { return iocp_; }
+
 protected:
 	bool Start(byte thread_count = 0);
 	void Stop();
@@ -17,8 +19,6 @@ protected:
 	virtual void OnDisconnected(const void* packet) = 0;
 	virtual void OnReceived(const void* packet, const DWORD bytes) = 0;
 	virtual void OnSend(const void* packet, const DWORD bytes) = 0;
-
-	const shared_ptr<Iocp>& get_iocp() { return iocp_;  }
 
 private:
 	shared_ptr<Iocp> iocp_;

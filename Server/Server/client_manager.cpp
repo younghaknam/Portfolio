@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "inetwork_event.h"
+#include "iocp.h"
+#include "protocol_def.h"
+#include "packet_def.h"
+#include "packet.h"
 #include "tcp_socket.h"
 #include "client.h"
 #include "client_manager.h"
@@ -7,6 +11,7 @@
 ClientManager::ClientManager()
 	: client_count_(0)
 	, listen_socket_(INVALID_SOCKET)
+	, io_iocp_(nullptr)
 {
 }
 
@@ -14,13 +19,18 @@ ClientManager::~ClientManager()
 {
 }
 
-bool ClientManager::Start(WORD client_count, SOCKET listen_socket)
+void ClientManager::Initialize(SOCKET listen_socket, const shared_ptr<Iocp>& io_iocp)
 {
-	if (client_count == 0 || listen_socket == INVALID_SOCKET)
+	listen_socket_ = listen_socket;
+	io_iocp_ = io_iocp;
+}
+
+bool ClientManager::Start(WORD client_count)
+{
+	if (client_count == 0)
 		return false;
 
 	client_count_ = client_count;
-	listen_socket_ = listen_socket;
 
 	for (WORD client_serial = 0; client_serial < client_count_; client_serial++)
 	{
@@ -44,7 +54,14 @@ void ClientManager::Stop()
 
 void ClientManager::OnAccepted(const void* packet)
 {
+	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
 
+	if (packet_ptr->get_client_serial() >= client_count_)
+		return;
+
+	auto client = clients_[packet_ptr->get_client_serial()];
+
+	io_iocp_->Bind(reinterpret_cast<HANDLE>(client->get_tcp_socket().get_socket()));
 }
 
 void ClientManager::OnDisconnected(const void* packet)
