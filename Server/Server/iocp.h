@@ -2,20 +2,22 @@
 
 enum IoType : byte
 {
+	kIONone = 0,
 	kIOAccept = 1,
 	kIOConnect = 2,
 	kIOSend = 3,
 	kIORecv = 4,
 };
 
-typedef struct _OverlappedEx : WSAOVERLAPPED
+struct OverlappedEx : WSAOVERLAPPED
 {
 	WSABUF wsa_buf;
 	IoType io_type;
-	void* object;
+	void* packet;
+	WORD client_serial;
 
 	void Initialize() { memset(this, 0x00, sizeof(OverlappedEx)); }
-} OverlappedEx;
+};
 
 class Iocp
 {

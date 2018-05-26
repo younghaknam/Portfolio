@@ -27,7 +27,7 @@ bool TcpSocket::RequestAccept(SOCKET listen_socket)
 
 	accept_overlapped_.Initialize();
 	accept_overlapped_.io_type = kIOAccept;
-	accept_overlapped_.object = this;
+	accept_overlapped_.packet = this;
 
 	memset(address_buffer_, 0x00, kAddressBufferSize);
 	DWORD	bytes = 0;

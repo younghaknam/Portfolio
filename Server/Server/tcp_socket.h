@@ -1,6 +1,6 @@
 #pragma once
 
-const int kAddressBufferSize = 1024;
+const static int kAddressBufferSize = 1024;
 
 class TcpSocket
 {

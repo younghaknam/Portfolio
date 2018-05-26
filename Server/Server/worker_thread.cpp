@@ -67,30 +67,30 @@ void WorkerThread::RunWorker()
 		if (stop_ == true)
 			break;
 
-		if (ovelapped == nullptr || ovelapped->object == nullptr)
+		if (ovelapped == nullptr || ovelapped->packet == nullptr)
 			continue;
 
 		if (result == false)
 		{
-			OnDisconnected(ovelapped->object);
+			OnDisconnected(ovelapped->packet);
 			continue;
 		}
 
 		if (bytes == 0)
 		{
 			if (ovelapped->io_type == kIOAccept)
-				OnAccepted(ovelapped->object);
+				OnAccepted(ovelapped->packet);
 			else
-				OnDisconnected(ovelapped->object);
+				OnDisconnected(ovelapped->packet);
 
 			continue;
 		}
 
 		if (ovelapped->io_type == kIORecv)
-			OnReceived(ovelapped->object, bytes);
+			OnReceived(ovelapped->packet, bytes);
 		else if (ovelapped->io_type == kIOSend)
-			OnSend(ovelapped->object, bytes);
+			OnSend(ovelapped->packet, bytes);
 		else
-			OnDisconnected(ovelapped->object);
+			OnDisconnected(ovelapped->packet);
 	}
 }
