@@ -9,10 +9,10 @@ public:
 	~PacketPool();
 
 	void Initialize(int default_count);
-	void AddPacket(const shared_ptr<Packet>& packet);
-	shared_ptr<Packet> GetPacket();
+	void AddPacket(const Packet* packet);
+	Packet* GetPacket();
 
 private:
-	queue<shared_ptr<Packet>> pool_;
+	queue<Packet*> pool_;
 	mutex lock_;
 };

@@ -17,7 +17,7 @@ TcpSocket::~TcpSocket()
 	Close();
 }
 
-bool TcpSocket::RequestAccept(SOCKET listen_socket, shared_ptr<Packet>& packet)
+bool TcpSocket::RequestAccept(SOCKET listen_socket, Packet* packet)
 {
 	if (socket_ != INVALID_SOCKET)
 		return false;

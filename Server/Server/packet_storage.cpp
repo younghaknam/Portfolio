@@ -26,12 +26,12 @@ void PacketStorage::Release()
 	packet_pool_.reset();
 }
 
-void PacketStorage::AddPacket(const shared_ptr<Packet>& packet)
+void PacketStorage::AddPacket(const Packet* packet)
 {
 	packet_pool_->AddPacket(packet);
 }
 
-shared_ptr<Packet> PacketStorage::GetPacket()
+Packet* PacketStorage::GetPacket()
 {
 	return packet_pool_->GetPacket();
 }

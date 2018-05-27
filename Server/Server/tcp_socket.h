@@ -10,7 +10,7 @@ public:
 	TcpSocket();
 	~TcpSocket();
 
-	bool RequestAccept(SOCKET listen_socket, shared_ptr<Packet>& packet);
+	bool RequestAccept(SOCKET listen_socket, Packet* packet);
 	void Close();
 
 	void set_socket(SOCKET socket) { socket_ = socket; }

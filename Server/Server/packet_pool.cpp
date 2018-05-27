@@ -21,25 +21,25 @@ void PacketPool::Initialize(int default_count)
 
 	for (int cnt = 0; cnt < default_count; cnt++)
 	{
-		auto packet = shared_ptr<Packet>(new Packet);
+		auto packet = new Packet;
 		pool_.emplace(packet);
 	}
 }
 
-void PacketPool::AddPacket(const shared_ptr<Packet>& packet)
+void PacketPool::AddPacket(const Packet* packet)
 {
 	lock_guard<mutex> guard(lock_);
-	pool_.emplace(packet);
+	pool_.emplace(const_cast<Packet*>(packet));
 }
 
-shared_ptr<Packet> PacketPool::GetPacket()
+Packet* PacketPool::GetPacket()
 {
-	shared_ptr<Packet> packet;
+	Packet* packet;
 	lock_guard<mutex> guard(lock_);
 
 	if (pool_.empty() == true)
 	{
-		packet = shared_ptr<Packet>(new Packet);
+		packet = new Packet;
 		return packet;
 	}
 
