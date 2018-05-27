@@ -25,7 +25,50 @@ Client::~Client()
 
 bool Client::RequestAccept(SOCKET listen_socket)
 {
+	return tcp_socket_.RequestAccept(listen_socket, GetPacket());
+}
+
+bool Client::RequestDisconnect()
+{
+	return true;
+}
+
+bool Client::RequestRecv()
+{
+	auto packet = GetPacket();
+	return tcp_socket_.RequestRecv(packet);
+}
+
+bool Client::RequestSend()
+{
+	return true;
+}
+
+void Client::Accepted(Packet* packet)
+{
+	packet->Initialize();
+	tcp_socket_.RequestRecv(packet);
+}
+
+void Client::Disconnected(Packet* packet)
+{
+
+}
+
+void Client::Received(Packet* packet, DWORD bytes)
+{
+	// 요청 처리
+}
+
+void Client::Sent(Packet* packet, DWORD bytes)
+{
+
+}
+
+Packet* Client::GetPacket()
+{
 	auto packet = PacketStorage::GetSingleton()->GetPacket();
 	packet->Initialize();
-	return tcp_socket_.RequestAccept(listen_socket, packet);
+	packet->set_client_serial(serial_);
+	return packet;
 }

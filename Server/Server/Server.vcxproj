@@ -153,7 +153,8 @@
     <ClInclude Include="client_io_worker.h" />
     <ClInclude Include="client_manager.h" />
     <ClInclude Include="iocp.h" />
-    <ClInclude Include="inetwork_event.h" />
+    <ClInclude Include="icompleted_io.h" />
+    <ClInclude Include="irequest_io.h" />
     <ClInclude Include="packet.h" />
     <ClInclude Include="packet_def.h" />
     <ClInclude Include="packet_pool.h" />

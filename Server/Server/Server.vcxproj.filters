@@ -63,13 +63,16 @@
     <ClInclude Include="protocol_def.h">
       <Filter>소스 파일\패킷</Filter>
     </ClInclude>
-    <ClInclude Include="inetwork_event.h">
-      <Filter>소스 파일\네트워크</Filter>
-    </ClInclude>
     <ClInclude Include="packet_storage.h">
       <Filter>소스 파일\패킷</Filter>
     </ClInclude>
     <ClInclude Include="client_io_worker.h">
+      <Filter>소스 파일\네트워크</Filter>
+    </ClInclude>
+    <ClInclude Include="icompleted_io.h">
+      <Filter>소스 파일\네트워크</Filter>
+    </ClInclude>
+    <ClInclude Include="irequest_io.h">
       <Filter>소스 파일\네트워크</Filter>
     </ClInclude>
   </ItemGroup>

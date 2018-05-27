@@ -89,7 +89,7 @@ void WorkerThread::RunWorker()
 		if (ovelapped->io_type == kIORecv)
 			OnReceived(ovelapped->packet, bytes);
 		else if (ovelapped->io_type == kIOSend)
-			OnSend(ovelapped->packet, bytes);
+			OnSent(ovelapped->packet, bytes);
 		else
 			OnDisconnected(ovelapped->packet);
 	}

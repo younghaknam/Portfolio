@@ -9,10 +9,6 @@ Packet::Packet()
 	header_ = reinterpret_cast<PacketHeader*>(memory_);
 	data_ = memory_ + kPacketHeaderSize;
 
-	overlapped_.Initialize();
-	overlapped_.wsa_buf.buf = reinterpret_cast<char*>(memory_);
-	overlapped_.packet = this;
-
 	Initialize();
 }
 
@@ -23,6 +19,11 @@ Packet::~Packet()
 void Packet::Initialize()
 {
 	memset(memory_, 0x00, kPacketMemorySize);
+
+	overlapped_.Initialize();
+	overlapped_.wsa_buf.buf = reinterpret_cast<char*>(memory_);
+	overlapped_.wsa_buf.len = kPacketMemorySize;
+	overlapped_.packet = this;
 }
 
 void Packet::SetProtocolID(protocol::Category category, protocol::PacketID packet_id)

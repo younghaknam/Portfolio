@@ -1,10 +1,11 @@
 #pragma once
 
-class iNetworkEvent;
+class iRequestIO;
+class iCompletedIO;
 class Client;
 class Iocp;
 
-class ClientManager : public iNetworkEvent
+class ClientManager : public iRequestIO, public iCompletedIO
 {
 public:
 	ClientManager();
@@ -14,10 +15,15 @@ public:
 	bool Start(WORD client_count);
 	void Stop();
 
+	virtual bool RequestAccept(const void* packet);
+	virtual bool RequestDisconnect(WORD client_serial);
+	virtual bool RequestReceiv(const void* packet);
+	virtual bool RequestSend(const void* packet);
+
 	virtual void OnAccepted(const void* packet);
 	virtual void OnDisconnected(const void* packet);
 	virtual void OnReceived(const void* packet, const DWORD bytes);
-	virtual void OnSend(const void* packet, const DWORD bytes);
+	virtual void OnSent(const void* packet, const DWORD bytes);
 
 private:
 	WORD client_count_;

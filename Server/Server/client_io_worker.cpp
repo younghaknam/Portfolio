@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "inetwork_event.h"
+#include "icompleted_io.h"
 #include "iocp.h"
 #include "worker_thread.h"
 #include "client_io_worker.h"
@@ -12,9 +12,9 @@ ClientIOWorker::~ClientIOWorker()
 {
 }
 
-bool ClientIOWorker::Start(const shared_ptr<iNetworkEvent>& network_event)
+bool ClientIOWorker::Start(const shared_ptr<iCompletedIO>& completed_io)
 {
-	network_event_ = network_event;
+	completed_io_ = completed_io;
 
 	byte thread_count = 0;
 	if (WorkerThread::Start(thread_count) == false)
@@ -40,10 +40,10 @@ void ClientIOWorker::OnDisconnected(const void* packet)
 
 void ClientIOWorker::OnReceived(const void* packet, const DWORD bytes)
 {
-
+	completed_io_->OnReceived(packet, bytes);
 }
 
-void ClientIOWorker::OnSend(const void* packet, const DWORD bytes)
+void ClientIOWorker::OnSent(const void* packet, const DWORD bytes)
 {
 
 }

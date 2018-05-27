@@ -11,6 +11,8 @@ public:
 	~TcpSocket();
 
 	bool RequestAccept(SOCKET listen_socket, Packet* packet);
+	bool RequestRecv(Packet* packet);
+	bool RequestSend(Packet* packet);
 	void Close();
 
 	void set_socket(SOCKET socket) { socket_ = socket; }
