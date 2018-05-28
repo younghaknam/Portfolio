@@ -13,7 +13,7 @@ public:
 	bool RequestAccept(SOCKET listen_socket, Packet* packet);
 	bool RequestRecv(Packet* packet);
 	bool RequestSend(Packet* packet);
-	void Close();
+	void Disconnect();
 
 	void set_socket(SOCKET socket) { socket_ = socket; }
 	SOCKET get_socket() { return socket_;  }

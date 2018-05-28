@@ -14,7 +14,7 @@ TcpSocket::TcpSocket()
 
 TcpSocket::~TcpSocket()
 {
-	Close();
+	Disconnect();
 }
 
 bool TcpSocket::RequestAccept(SOCKET listen_socket, Packet* packet)
@@ -34,7 +34,7 @@ bool TcpSocket::RequestAccept(SOCKET listen_socket, Packet* packet)
 	if (result == false && WSAGetLastError() != ERROR_IO_PENDING)
 	{
 		//int err = GetLastError();
-		Close();
+		Disconnect();
 		return false;
 	}
 	
@@ -54,7 +54,7 @@ bool TcpSocket::RequestRecv(Packet* packet)
 	if (result == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
 	{
 		//int err = GetLastError();
-		Close();
+		Disconnect();
 		return false;
 	}
 
@@ -68,20 +68,19 @@ bool TcpSocket::RequestSend(Packet* packet)
 
 	packet->get_overlapped()->io_type = kIOSend;
 
-	DWORD flag = 0;
 	DWORD bytes = 0;
 	int result = WSASend(socket_, &packet->get_overlapped()->wsa_buf, 1, &bytes, 0, packet->get_overlapped(), NULL);
 	if (result == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
 	{
 		//int err = GetLastError();
-		Close();
+		Disconnect();
 		return false;
 	}
 
 	return true;
 }
 
-void TcpSocket::Close()
+void TcpSocket::Disconnect()
 {
 	if (socket_ == INVALID_SOCKET)
 		return;

@@ -5,11 +5,6 @@
 #include "packet_def.h"
 #include "packet.h"
 #include "packet_pool.h"
-#include "iocp.h"
-#include "protocol_def.h"
-#include "packet_def.h"
-#include "packet.h"
-#include "packet_pool.h"
 #include "packet_storage.h"
 #include "tcp_socket.h"
 #include "client.h"
@@ -57,7 +52,32 @@ void Client::Disconnected(Packet* packet)
 
 void Client::Received(Packet* packet, DWORD bytes)
 {
-	// 요청 처리
+	packet->set_io_bytes(bytes);
+
+	int packet_count = packet->GetCompletedCount();
+	for (int cnt = 0; cnt < packet_count; cnt++)
+	{
+		auto split_packet = GetPacket();
+		if (packet->Split(split_packet) == false)
+		{
+			PacketStorage::GetSingleton()->AddPacket(split_packet);
+			Disconnected(packet);
+			return;
+		}
+
+		// ->AddPacket(split_packet) 컨텐츠 큐에 등록
+	}
+
+	if (packet->IsCompleted() == false)
+	{
+		packet->SetCurrentReceivedBytes();
+		tcp_socket_.RequestRecv(packet);
+		return;
+	}
+
+	// ->AddPacket(packet) 컨텐츠 큐에 등록
+
+	RequestRecv();
 }
 
 void Client::Sent(Packet* packet, DWORD bytes)

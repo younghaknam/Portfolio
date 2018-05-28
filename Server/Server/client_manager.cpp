@@ -81,7 +81,6 @@ void ClientManager::OnAccepted(const void* packet)
 
 	auto client = clients_[packet_ptr->get_client_serial()];
 	io_iocp_->Bind(reinterpret_cast<HANDLE>(client->get_tcp_socket().get_socket()));
-
 	client->Accepted(packet_ptr);
 }
 
@@ -97,6 +96,7 @@ void ClientManager::OnReceived(const void* packet, const DWORD bytes)
 		return;
 
 	auto client = clients_[packet_ptr->get_client_serial()];
+	client->Received(packet_ptr, bytes);
 }
 
 void ClientManager::OnSent(const void* packet, const DWORD bytes)
