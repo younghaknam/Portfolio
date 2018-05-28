@@ -42,9 +42,7 @@ bool Packet::SetData(const void* data, WORD size)
 
 	memcpy(data_, data, size);
 	header_->data_size = size;
-
-	io_bytes_ = kPacketHeaderSize + size;
-	overlapped_.wsa_buf.len = io_bytes_;
+	overlapped_.wsa_buf.len = GetSize();
 
 	return true;
 }
@@ -58,12 +56,17 @@ bool Packet::GetData(void* data, WORD size)
 	return true;
 }
 
+WORD Packet::GetSize()
+{
+	return kPacketHeaderSize + header_->data_size;
+}
+
 bool Packet::IsCompleted()
 {
 	if (io_bytes_ <= kPacketHeaderSize)
 		return false;
 
-	if (io_bytes_ < kPacketHeaderSize + header_->data_size)
+	if (io_bytes_ < GetSize())
 		return false;
 
 	return true;
@@ -102,7 +105,7 @@ bool Packet::Split(Packet* packet)
 	if (IsCompleted() == false)
 		return false;
 
-	WORD split_size = kPacketHeaderSize + header_->data_size;
+	WORD split_size = GetSize();
 
 	packet->Initialize();
 	packet->set_client_serial(client_serial_);
@@ -115,8 +118,14 @@ bool Packet::Split(Packet* packet)
 	return true;
 }
 
-void Packet::SetCurrentReceivedBytes()
+void Packet::SetReceivedBytes()
 {
 	overlapped_.wsa_buf.buf = reinterpret_cast<char*>(memory_ + io_bytes_);
 	overlapped_.wsa_buf.len = kPacketMemorySize - io_bytes_;
+}
+
+void Packet::SetSentBytes()
+{
+	overlapped_.wsa_buf.buf = reinterpret_cast<char*>(memory_ + io_bytes_);
+	overlapped_.wsa_buf.len = GetSize() - io_bytes_;
 }

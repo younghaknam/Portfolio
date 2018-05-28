@@ -11,7 +11,9 @@
 
 Client::Client(WORD serial)
 	: serial_(serial)
+	, sending_(false)
 {
+	send_pool_ = shared_ptr<PacketPool>(new PacketPool);
 }
 
 Client::~Client()
@@ -34,9 +36,18 @@ bool Client::RequestRecv()
 	return tcp_socket_.RequestRecv(packet);
 }
 
-bool Client::RequestSend()
+bool Client::RequestSend(const Packet* packet)
 {
-	return true;
+	lock_guard<mutex> guard(lock_);
+
+	if (sending_ == true)
+	{
+		send_pool_->AddPacket(packet);
+		return true;
+	}
+
+	sending_ = true;
+	return tcp_socket_.RequestSend(const_cast<Packet*>(packet));
 }
 
 void Client::Accepted(Packet* packet)
@@ -70,7 +81,7 @@ void Client::Received(Packet* packet, DWORD bytes)
 
 	if (packet->IsCompleted() == false)
 	{
-		packet->SetCurrentReceivedBytes();
+		packet->SetReceivedBytes();
 		tcp_socket_.RequestRecv(packet);
 		return;
 	}
@@ -82,7 +93,23 @@ void Client::Received(Packet* packet, DWORD bytes)
 
 void Client::Sent(Packet* packet, DWORD bytes)
 {
+	lock_guard<mutex> guard(lock_);
+	packet->set_io_bytes(bytes);
 
+	if (packet->IsCompleted() == false)
+	{
+		packet->SetSentBytes();
+		tcp_socket_.RequestSend(packet);
+		return;
+	}
+
+	if (send_pool_->Empty() == false)
+	{
+		tcp_socket_.RequestSend(send_pool_->GetPacket());
+		return;
+	}
+
+	sending_ = false;
 }
 
 Packet* Client::GetPacket()

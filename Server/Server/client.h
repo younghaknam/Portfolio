@@ -1,6 +1,7 @@
 #pragma once
 
 class TcpSocket;
+class PacketPool;
 
 class Client
 {
@@ -11,7 +12,7 @@ public:
 	bool RequestAccept(SOCKET listen_socket);
 	bool RequestDisconnect();
 	bool RequestRecv();
-	bool RequestSend();
+	bool RequestSend(const Packet* packet);
 
 	void Accepted(Packet* packet);
 	void Disconnected(Packet* packet);
@@ -26,4 +27,8 @@ private:
 private:
 	WORD serial_;
 	TcpSocket tcp_socket_;
+	bool sending_;
+	shared_ptr<PacketPool> send_pool_;
+	mutex lock_;
+	
 };

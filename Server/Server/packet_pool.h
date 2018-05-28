@@ -11,6 +11,7 @@ public:
 	void Initialize(int default_count);
 	void AddPacket(const Packet* packet);
 	Packet* GetPacket();
+	bool Empty();
 
 private:
 	queue<Packet*> pool_;

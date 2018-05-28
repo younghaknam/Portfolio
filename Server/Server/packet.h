@@ -10,10 +10,12 @@ public:
 	void SetProtocolID(protocol::Category category, protocol::PacketID packet_id);
 	bool SetData(const void* data, WORD size);
 	bool GetData(void* data, WORD size);
+	WORD GetSize();
 	bool IsCompleted();
 	int GetCompletedCount();
 	bool Split(Packet* packet);
-	void SetCurrentReceivedBytes();
+	void SetReceivedBytes();
+	void SetSentBytes();
 
 	UINT8* get_memory() { return memory_; }
 	const PacketHeader* get_header() { return header_; }

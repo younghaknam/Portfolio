@@ -48,3 +48,9 @@ Packet* PacketPool::GetPacket()
 
 	return packet;
 }
+
+bool PacketPool::Empty()
+{
+	lock_guard<mutex> guard(lock_);
+	return pool_.empty();
+}
