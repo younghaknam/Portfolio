@@ -35,7 +35,7 @@ bool ClientIOWorker::Bind(SOCKET socket)
 
 void ClientIOWorker::OnDisconnected(const void* packet)
 {
-
+	completed_io_->OnDisconnected(packet);
 }
 
 void ClientIOWorker::OnReceived(const void* packet, const DWORD bytes)
@@ -45,5 +45,5 @@ void ClientIOWorker::OnReceived(const void* packet, const DWORD bytes)
 
 void ClientIOWorker::OnSent(const void* packet, const DWORD bytes)
 {
-
+	completed_io_->OnSent(packet, bytes);
 }

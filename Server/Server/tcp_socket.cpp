@@ -9,6 +9,7 @@
 TcpSocket::TcpSocket()
 	: socket_(INVALID_SOCKET)
 	, port_(0)
+	, io_count_(0)
 {
 }
 
@@ -38,10 +39,11 @@ bool TcpSocket::RequestAccept(SOCKET listen_socket, Packet* packet)
 		return false;
 	}
 	
+	io_count_++;
 	return true;
 }
 
-bool TcpSocket::RequestRecv(Packet* packet)
+bool TcpSocket::RequestReceiv(Packet* packet)
 {
 	if (socket_ != INVALID_SOCKET)
 		return false;
@@ -58,6 +60,7 @@ bool TcpSocket::RequestRecv(Packet* packet)
 		return false;
 	}
 
+	io_count_++;
 	return true;
 }
 
@@ -77,6 +80,7 @@ bool TcpSocket::RequestSend(Packet* packet)
 		return false;
 	}
 
+	io_count_++;
 	return true;
 }
 

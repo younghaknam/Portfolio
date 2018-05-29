@@ -6,12 +6,12 @@ class PacketPool;
 class Client
 {
 public:
-	explicit Client(WORD serial);
+	explicit Client(WORD serial, SOCKET listen_socket);
 	~Client();
 
-	bool RequestAccept(SOCKET listen_socket);
+	bool RequestAccept();
 	bool RequestDisconnect();
-	bool RequestRecv();
+	bool RequestReceiv();
 	bool RequestSend(const Packet* packet);
 
 	void Accepted(Packet* packet);
@@ -23,12 +23,14 @@ public:
 
 private:
 	Packet* GetPacket();
+	void ReturnSendPackets();
 
 private:
 	WORD serial_;
+	SOCKET listen_socket_;
 	TcpSocket tcp_socket_;
 	bool sending_;
 	shared_ptr<PacketPool> send_pool_;
-	mutex lock_;
-	
+	mutex send_lock_;
+	mutex disconnect_lock_;
 };

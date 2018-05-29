@@ -35,8 +35,8 @@ bool ClientManager::Start(WORD client_count)
 
 	for (WORD client_serial = 0; client_serial < client_count_; client_serial++)
 	{
-		auto client = shared_ptr<Client>(new Client(client_serial));
-		if (client->RequestAccept(listen_socket_) == false)
+		auto client = shared_ptr<Client>(new Client(client_serial, listen_socket_));
+		if (client->RequestAccept() == false)
 			return false;
 
 		clients_.push_back(client);
@@ -49,57 +49,75 @@ void ClientManager::Stop()
 {
 	for (auto client : clients_)
 	{
-		//client->
+		client->RequestDisconnect();
 	}
-}
-
-bool ClientManager::RequestAccept(const void* packet)
-{
-	return true;
 }
 
 bool ClientManager::RequestDisconnect(WORD client_serial)
 {
-	return true;
-}
+	shared_ptr<Client> client(nullptr);
+	if (GetClient(client_serial, client) == false)
+		return false;
 
-bool ClientManager::RequestReceiv(const void* packet)
-{
-	return true;
+	return client->RequestDisconnect();
 }
 
 bool ClientManager::RequestSend(const void* packet)
 {
-	return true;
+	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
+	shared_ptr<Client> client(nullptr);
+	if (GetClient(packet_ptr->get_client_serial(), client) == false)
+		return false;
+
+	return client->RequestSend(packet_ptr);
 }
 
 void ClientManager::OnAccepted(const void* packet)
 {
 	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
-	if (packet_ptr->get_client_serial() >= client_count_)
+	shared_ptr<Client> client(nullptr);
+	if (GetClient(packet_ptr->get_client_serial(), client) == false)
 		return;
 
-	auto client = clients_[packet_ptr->get_client_serial()];
 	io_iocp_->Bind(reinterpret_cast<HANDLE>(client->get_tcp_socket().get_socket()));
 	client->Accepted(packet_ptr);
 }
 
 void ClientManager::OnDisconnected(const void* packet)
 {
+	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
+	shared_ptr<Client> client(nullptr);
+	if (GetClient(packet_ptr->get_client_serial(), client) == false)
+		return;
 
+	client->Disconnected(packet_ptr);
 }
 
 void ClientManager::OnReceived(const void* packet, const DWORD bytes)
 {
 	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
-	if (packet_ptr->get_client_serial() >= client_count_)
+	shared_ptr<Client> client(nullptr);
+	if (GetClient(packet_ptr->get_client_serial(), client) == false)
 		return;
 
-	auto client = clients_[packet_ptr->get_client_serial()];
 	client->Received(packet_ptr, bytes);
 }
 
 void ClientManager::OnSent(const void* packet, const DWORD bytes)
 {
+	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
+	shared_ptr<Client> client(nullptr);
+	if (GetClient(packet_ptr->get_client_serial(), client) == false)
+		return;
 
+	client->Sent(packet_ptr, bytes);
+}
+
+ bool ClientManager::GetClient(WORD serial, shared_ptr<Client>& client)
+{
+	 if (serial >= client_count_)
+		 return false;
+
+	 client = clients_[serial];
+	 return true;
 }

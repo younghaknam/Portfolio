@@ -15,15 +15,18 @@ public:
 	bool Start(WORD client_count);
 	void Stop();
 
-	virtual bool RequestAccept(const void* packet);
+	virtual bool RequestAccept(const void* packet) { return false; }
+	virtual bool RequestReceiv(const void* packet) { return false; }
 	virtual bool RequestDisconnect(WORD client_serial);
-	virtual bool RequestReceiv(const void* packet);
 	virtual bool RequestSend(const void* packet);
 
 	virtual void OnAccepted(const void* packet);
 	virtual void OnDisconnected(const void* packet);
 	virtual void OnReceived(const void* packet, const DWORD bytes);
 	virtual void OnSent(const void* packet, const DWORD bytes);
+
+private:
+	bool GetClient(WORD serial, shared_ptr<Client>& client);
 
 private:
 	WORD client_count_;

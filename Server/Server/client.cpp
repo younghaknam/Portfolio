@@ -9,9 +9,10 @@
 #include "tcp_socket.h"
 #include "client.h"
 
-Client::Client(WORD serial)
+Client::Client(WORD serial, SOCKET listen_socket)
 	: serial_(serial)
 	, sending_(false)
+	, listen_socket_(listen_socket)
 {
 	send_pool_ = shared_ptr<PacketPool>(new PacketPool);
 }
@@ -20,25 +21,50 @@ Client::~Client()
 {
 }
 
-bool Client::RequestAccept(SOCKET listen_socket)
+bool Client::RequestAccept()
 {
-	return tcp_socket_.RequestAccept(listen_socket, GetPacket());
+	if (listen_socket_ == INVALID_SOCKET)
+		return false;
+
+	auto packet = GetPacket();
+	if (tcp_socket_.RequestAccept(listen_socket_, packet) == false)
+	{
+		PacketStorage::GetSingleton()->AddPacket(packet);
+		return false;
+	}
+
+	return true;
 }
 
 bool Client::RequestDisconnect()
 {
+	lock_guard<mutex> guard(disconnect_lock_);
+
+	tcp_socket_.Disconnect();
+	ReturnSendPackets();
+
+	if (tcp_socket_.get_io_count() == 0)
+		RequestAccept();
+
 	return true;
 }
 
-bool Client::RequestRecv()
+bool Client::RequestReceiv()
 {
 	auto packet = GetPacket();
-	return tcp_socket_.RequestRecv(packet);
+	if (tcp_socket_.RequestReceiv(packet) == false)
+	{
+		PacketStorage::GetSingleton()->AddPacket(packet);
+		RequestDisconnect();
+		return false;
+	}
+
+	return true;
 }
 
 bool Client::RequestSend(const Packet* packet)
 {
-	lock_guard<mutex> guard(lock_);
+	lock_guard<mutex> guard(send_lock_);
 
 	if (sending_ == true)
 	{
@@ -47,23 +73,45 @@ bool Client::RequestSend(const Packet* packet)
 	}
 
 	sending_ = true;
-	return tcp_socket_.RequestSend(const_cast<Packet*>(packet));
+	if (tcp_socket_.RequestSend(const_cast<Packet*>(packet)) == false)
+	{
+		PacketStorage::GetSingleton()->AddPacket(packet);
+		RequestDisconnect();
+		return false;
+	}
+
+	return true;
 }
 
 void Client::Accepted(Packet* packet)
 {
+	tcp_socket_.decrement_io_count();
+
 	packet->Initialize();
-	tcp_socket_.RequestRecv(packet);
+	packet->set_client_serial(serial_);
+	if (tcp_socket_.RequestReceiv(packet) == false)
+	{
+		PacketStorage::GetSingleton()->AddPacket(packet);
+		RequestDisconnect();
+	}
 }
 
 void Client::Disconnected(Packet* packet)
 {
+	lock_guard<mutex> guard(disconnect_lock_);
 
+	tcp_socket_.decrement_io_count();
+	tcp_socket_.Disconnect();
+	ReturnSendPackets();
+
+	if (tcp_socket_.get_io_count() == 0)
+		RequestAccept();
 }
 
 void Client::Received(Packet* packet, DWORD bytes)
 {
-	packet->set_io_bytes(bytes);
+	tcp_socket_.decrement_io_count();
+	packet->set_io_bytes(static_cast<WORD>(bytes));
 
 	int packet_count = packet->GetCompletedCount();
 	for (int cnt = 0; cnt < packet_count; cnt++)
@@ -72,7 +120,8 @@ void Client::Received(Packet* packet, DWORD bytes)
 		if (packet->Split(split_packet) == false)
 		{
 			PacketStorage::GetSingleton()->AddPacket(split_packet);
-			Disconnected(packet);
+			PacketStorage::GetSingleton()->AddPacket(packet);
+			RequestDisconnect();
 			return;
 		}
 
@@ -82,30 +131,40 @@ void Client::Received(Packet* packet, DWORD bytes)
 	if (packet->IsCompleted() == false)
 	{
 		packet->SetReceivedBytes();
-		tcp_socket_.RequestRecv(packet);
+		tcp_socket_.RequestReceiv(packet);
 		return;
 	}
 
 	// ->AddPacket(packet) ÄÁÅÙÃ÷ Å¥¿¡ µî·Ï
 
-	RequestRecv();
+	RequestReceiv();
 }
 
 void Client::Sent(Packet* packet, DWORD bytes)
 {
-	lock_guard<mutex> guard(lock_);
-	packet->set_io_bytes(bytes);
+	tcp_socket_.decrement_io_count();
+	packet->set_io_bytes(static_cast<WORD>(bytes));
 
+	lock_guard<mutex> guard(send_lock_);
 	if (packet->IsCompleted() == false)
 	{
 		packet->SetSentBytes();
-		tcp_socket_.RequestSend(packet);
+		if (tcp_socket_.RequestSend(packet) == false)
+		{
+			PacketStorage::GetSingleton()->AddPacket(packet);
+			RequestDisconnect();
+		}
 		return;
 	}
 
 	if (send_pool_->Empty() == false)
 	{
-		tcp_socket_.RequestSend(send_pool_->GetPacket());
+		auto send_packet = send_pool_->GetPacket();
+		if (tcp_socket_.RequestSend(send_packet) == false)
+		{
+			PacketStorage::GetSingleton()->AddPacket(send_packet);
+			RequestDisconnect();
+		}
 		return;
 	}
 
@@ -118,4 +177,14 @@ Packet* Client::GetPacket()
 	packet->Initialize();
 	packet->set_client_serial(serial_);
 	return packet;
+}
+
+void Client::ReturnSendPackets()
+{
+	lock_guard<mutex> guard(send_lock_);
+
+	while (send_pool_->Empty() == false)
+	{
+		PacketStorage::GetSingleton()->AddPacket(send_pool_->GetPacket());
+	}
 }
