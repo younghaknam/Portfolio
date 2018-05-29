@@ -13,14 +13,20 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="소스 파일\네트워크">
-      <UniqueIdentifier>{28409c32-733b-4ec0-8708-4c1f2e1b0e30}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\패킷">
-      <UniqueIdentifier>{e4718be4-95d5-4bfe-b748-f3873fd7679c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\공통">
       <UniqueIdentifier>{99fcc05f-d62e-426e-8c03-7265b816e538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\공통\패킷">
+      <UniqueIdentifier>{e4718be4-95d5-4bfe-b748-f3873fd7679c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\IO 엔진">
+      <UniqueIdentifier>{9e4f9bde-6aef-4ced-9d9e-063088353d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\IO 엔진\네트워크">
+      <UniqueIdentifier>{28409c32-733b-4ec0-8708-4c1f2e1b0e30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\컨텐츠">
+      <UniqueIdentifier>{31892faa-9cb1-457a-90b4-2b474420b3d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,16 +37,16 @@
       <Filter>기타 파일</Filter>
     </ClInclude>
     <ClInclude Include="client.h">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClInclude>
     <ClInclude Include="client_acceptor.h">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClInclude>
     <ClInclude Include="client_manager.h">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClInclude>
     <ClInclude Include="tcp_socket.h">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClInclude>
     <ClInclude Include="iocp.h">
       <Filter>소스 파일\공통</Filter>
@@ -49,31 +55,34 @@
       <Filter>소스 파일\공통</Filter>
     </ClInclude>
     <ClInclude Include="packet.h">
-      <Filter>소스 파일\패킷</Filter>
+      <Filter>소스 파일\공통\패킷</Filter>
     </ClInclude>
     <ClInclude Include="singleton.h">
       <Filter>소스 파일\공통</Filter>
     </ClInclude>
     <ClInclude Include="packet_pool.h">
-      <Filter>소스 파일\패킷</Filter>
+      <Filter>소스 파일\공통\패킷</Filter>
     </ClInclude>
     <ClInclude Include="packet_def.h">
-      <Filter>소스 파일\패킷</Filter>
+      <Filter>소스 파일\공통\패킷</Filter>
     </ClInclude>
     <ClInclude Include="protocol_def.h">
-      <Filter>소스 파일\패킷</Filter>
+      <Filter>소스 파일\공통\패킷</Filter>
     </ClInclude>
     <ClInclude Include="packet_storage.h">
-      <Filter>소스 파일\패킷</Filter>
+      <Filter>소스 파일\공통\패킷</Filter>
     </ClInclude>
     <ClInclude Include="client_io_worker.h">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClInclude>
     <ClInclude Include="icompleted_io.h">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
+    </ClInclude>
+    <ClInclude Include="io_engine.h">
+      <Filter>소스 파일\IO 엔진</Filter>
     </ClInclude>
     <ClInclude Include="irequest_io.h">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -81,16 +90,16 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="client.cpp">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClCompile>
     <ClCompile Include="client_acceptor.cpp">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClCompile>
     <ClCompile Include="client_manager.cpp">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClCompile>
     <ClCompile Include="tcp_socket.cpp">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>기타 파일</Filter>
@@ -102,16 +111,19 @@
       <Filter>소스 파일\공통</Filter>
     </ClCompile>
     <ClCompile Include="packet.cpp">
-      <Filter>소스 파일\패킷</Filter>
+      <Filter>소스 파일\공통\패킷</Filter>
     </ClCompile>
     <ClCompile Include="packet_pool.cpp">
-      <Filter>소스 파일\패킷</Filter>
+      <Filter>소스 파일\공통\패킷</Filter>
     </ClCompile>
     <ClCompile Include="packet_storage.cpp">
-      <Filter>소스 파일\패킷</Filter>
+      <Filter>소스 파일\공통\패킷</Filter>
     </ClCompile>
     <ClCompile Include="client_io_worker.cpp">
-      <Filter>소스 파일\네트워크</Filter>
+      <Filter>소스 파일\IO 엔진\네트워크</Filter>
+    </ClCompile>
+    <ClCompile Include="io_engine.cpp">
+      <Filter>소스 파일\IO 엔진</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

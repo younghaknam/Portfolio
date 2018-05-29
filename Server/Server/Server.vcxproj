@@ -154,6 +154,7 @@
     <ClInclude Include="client_manager.h" />
     <ClInclude Include="iocp.h" />
     <ClInclude Include="icompleted_io.h" />
+    <ClInclude Include="io_engine.h" />
     <ClInclude Include="irequest_io.h" />
     <ClInclude Include="packet.h" />
     <ClInclude Include="packet_def.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="client_io_worker.cpp" />
     <ClCompile Include="client_manager.cpp" />
     <ClCompile Include="iocp.cpp" />
+    <ClCompile Include="io_engine.cpp" />
     <ClCompile Include="packet.cpp" />
     <ClCompile Include="packet_pool.cpp" />
     <ClCompile Include="packet_storage.cpp" />
