@@ -45,8 +45,8 @@ bool Iocp::Bind(HANDLE handle) const
 
 bool Iocp::GetCompletionStatus(DWORD& number_of_bytes, OverlappedEx** ovelapped)
 {
-	PULONG_PTR completion_key = nullptr;
-	return GetQueuedCompletionStatus(iocp_handle_, &number_of_bytes, completion_key, reinterpret_cast<OVERLAPPED**>(ovelapped), INFINITE);
+	ULONG_PTR completion_key = 0;
+	return GetQueuedCompletionStatus(iocp_handle_, &number_of_bytes, &completion_key, reinterpret_cast<OVERLAPPED**>(ovelapped), INFINITE);
 }
 
 bool Iocp::PostCompletionStatus(DWORD number_of_bytes, const OverlappedEx& ovelapped)

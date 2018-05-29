@@ -34,7 +34,7 @@ bool IOEngine::Start()
 	client_acceptor_ = shared_ptr<ClientAcceptor>(new ClientAcceptor);
 	client_io_worker_ = shared_ptr<ClientIOWorker>(new ClientIOWorker);
 
-	if (client_acceptor_->Start(L"192.168.0.12", 15110, dynamic_pointer_cast<iCompletedIO>(client_manager_)) == false)
+	if (client_acceptor_->Start(L"0.0.0.0", 15110, dynamic_pointer_cast<iCompletedIO>(client_manager_)) == false)
 		return false;
 
 	if (client_io_worker_->Start(dynamic_pointer_cast<iCompletedIO>(client_manager_)) == false)

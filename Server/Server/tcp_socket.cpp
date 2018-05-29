@@ -29,26 +29,30 @@ bool TcpSocket::RequestAccept(SOCKET listen_socket, Packet* packet)
 
 	packet->get_overlapped()->io_type = kIOAccept;
 
+	io_count_++;
+
 	DWORD	bytes = 0;
-	bool result = AcceptEx(listen_socket, socket_, packet->get_memory(), kAddressBufferSize - ((sizeof(sockaddr_in) + 16) * 2),
-								sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16,	&bytes, packet->get_overlapped());
+	bool result = AcceptEx(listen_socket, socket_, packet->get_memory(), 0, sizeof(SOCKADDR_IN) + 16, 
+									sizeof(SOCKADDR_IN) + 16, &bytes, packet->get_overlapped());
 	if (result == false && WSAGetLastError() != ERROR_IO_PENDING)
 	{
 		//int err = GetLastError();
+		io_count_--;
 		Disconnect();
 		return false;
 	}
 	
-	io_count_++;
 	return true;
 }
 
 bool TcpSocket::RequestReceiv(Packet* packet)
 {
-	if (socket_ != INVALID_SOCKET)
+	if (socket_ == INVALID_SOCKET)
 		return false;
 
 	packet->get_overlapped()->io_type = kIORecv;
+
+	io_count_++;
 
 	DWORD flag = 0;
 	DWORD bytes = 0;
@@ -56,31 +60,33 @@ bool TcpSocket::RequestReceiv(Packet* packet)
 	if (result == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
 	{
 		//int err = GetLastError();
+		io_count_--;
 		Disconnect();
 		return false;
 	}
 
-	io_count_++;
 	return true;
 }
 
 bool TcpSocket::RequestSend(Packet* packet)
 {
-	if (socket_ != INVALID_SOCKET)
+	if (socket_ == INVALID_SOCKET)
 		return false;
 
 	packet->get_overlapped()->io_type = kIOSend;
+
+	io_count_++;
 
 	DWORD bytes = 0;
 	int result = WSASend(socket_, &packet->get_overlapped()->wsa_buf, 1, &bytes, 0, packet->get_overlapped(), NULL);
 	if (result == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
 	{
 		//int err = GetLastError();
+		io_count_--;
 		Disconnect();
 		return false;
 	}
 
-	io_count_++;
 	return true;
 }
 
