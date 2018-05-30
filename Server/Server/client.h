@@ -2,11 +2,12 @@
 
 class TcpSocket;
 class PacketPool;
+class iContent;
 
 class Client
 {
 public:
-	explicit Client(WORD serial, SOCKET listen_socket);
+	explicit Client(WORD serial, SOCKET listen_socket, const shared_ptr<iContent>& content);
 	~Client();
 
 	bool RequestAccept();
@@ -33,4 +34,5 @@ private:
 	shared_ptr<PacketPool> send_pool_;
 	mutex send_lock_;
 	mutex disconnect_lock_;
+	shared_ptr<iContent> content_;
 };

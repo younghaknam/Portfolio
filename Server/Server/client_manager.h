@@ -2,6 +2,7 @@
 
 class iRequestIO;
 class iCompletedIO;
+class iContent;
 class Client;
 class Iocp;
 
@@ -11,7 +12,7 @@ public:
 	ClientManager();
 	~ClientManager();
 
-	void Initialize(SOCKET listen_socket, const shared_ptr<Iocp>& io_iocp);
+	void Initialize(SOCKET listen_socket, const shared_ptr<Iocp>& io_iocp, const shared_ptr<iContent>& content);
 	bool Start(WORD client_count);
 	void Stop();
 
@@ -31,4 +32,5 @@ private:
 	SOCKET listen_socket_;
 	shared_ptr<Iocp> io_iocp_;
 	vector<shared_ptr<Client>> clients_;
+	shared_ptr<iContent> content_;
 };

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "irequest_io.h"
 #include "icompleted_io.h"
+#include "icontent.h"
 #include "singleton.h"
 #include "iocp.h"
 #include "worker_thread.h"
@@ -16,23 +17,24 @@
 
 IOEngine::IOEngine()
 {
+	client_manager_ = shared_ptr<ClientManager>(new ClientManager);
+	client_acceptor_ = shared_ptr<ClientAcceptor>(new ClientAcceptor);
+	client_io_worker_ = shared_ptr<ClientIOWorker>(new ClientIOWorker);
 }
 
 IOEngine::~IOEngine()
 {
 }
 
-bool IOEngine::Start()
+bool IOEngine::Start(const shared_ptr<iContent>& content)
 {
 	WSADATA wsa_data;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
 		return false;
 
-	PacketStorage::GetSingleton()->Create(10000);
+	content_ = content;
 
-	client_manager_ = shared_ptr<ClientManager>(new ClientManager);
-	client_acceptor_ = shared_ptr<ClientAcceptor>(new ClientAcceptor);
-	client_io_worker_ = shared_ptr<ClientIOWorker>(new ClientIOWorker);
+	PacketStorage::GetSingleton()->Create(10000);
 
 	if (client_acceptor_->Start(L"0.0.0.0", 15110, dynamic_pointer_cast<iCompletedIO>(client_manager_)) == false)
 		return false;
@@ -40,7 +42,7 @@ bool IOEngine::Start()
 	if (client_io_worker_->Start(dynamic_pointer_cast<iCompletedIO>(client_manager_)) == false)
 		return false;
 
-	client_manager_->Initialize(client_acceptor_->get_socket(), client_io_worker_->get_iocp());
+	client_manager_->Initialize(client_acceptor_->get_socket(), client_io_worker_->get_iocp(), content_);
 	if (client_manager_->Start(1000) == false)
 		return false;
 

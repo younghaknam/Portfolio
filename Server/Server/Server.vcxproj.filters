@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\컨텐츠">
       <UniqueIdentifier>{31892faa-9cb1-457a-90b4-2b474420b3d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\공통\프로토콜">
+      <UniqueIdentifier>{55c17ba3-68b2-4d10-86ee-a6777be3c57e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -66,9 +69,6 @@
     <ClInclude Include="packet_def.h">
       <Filter>소스 파일\공통\패킷</Filter>
     </ClInclude>
-    <ClInclude Include="protocol_def.h">
-      <Filter>소스 파일\공통\패킷</Filter>
-    </ClInclude>
     <ClInclude Include="packet_storage.h">
       <Filter>소스 파일\공통\패킷</Filter>
     </ClInclude>
@@ -83,6 +83,21 @@
     </ClInclude>
     <ClInclude Include="irequest_io.h">
       <Filter>소스 파일\IO 엔진</Filter>
+    </ClInclude>
+    <ClInclude Include="content_worker.h">
+      <Filter>소스 파일\컨텐츠</Filter>
+    </ClInclude>
+    <ClInclude Include="server_content.h">
+      <Filter>소스 파일\컨텐츠</Filter>
+    </ClInclude>
+    <ClInclude Include="icontent.h">
+      <Filter>소스 파일\IO 엔진</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol_def.h">
+      <Filter>소스 파일\공통\프로토콜</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol_handling.h">
+      <Filter>소스 파일\컨텐츠</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +139,15 @@
     </ClCompile>
     <ClCompile Include="io_engine.cpp">
       <Filter>소스 파일\IO 엔진</Filter>
+    </ClCompile>
+    <ClCompile Include="content_worker.cpp">
+      <Filter>소스 파일\컨텐츠</Filter>
+    </ClCompile>
+    <ClCompile Include="server_content.cpp">
+      <Filter>소스 파일\컨텐츠</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol_handling.cpp">
+      <Filter>소스 파일\컨텐츠</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

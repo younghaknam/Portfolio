@@ -49,8 +49,8 @@ bool Iocp::GetCompletionStatus(DWORD& number_of_bytes, OverlappedEx** ovelapped)
 	return GetQueuedCompletionStatus(iocp_handle_, &number_of_bytes, &completion_key, reinterpret_cast<OVERLAPPED**>(ovelapped), INFINITE);
 }
 
-bool Iocp::PostCompletionStatus(DWORD number_of_bytes, const OverlappedEx& ovelapped)
+bool Iocp::PostCompletionStatus(DWORD number_of_bytes, const OverlappedEx* ovelapped)
 {
 	ULONG_PTR completion_key = 0;
-	return PostQueuedCompletionStatus(iocp_handle_, number_of_bytes, completion_key, const_cast<OverlappedEx*>(&ovelapped));
+	return PostQueuedCompletionStatus(iocp_handle_, number_of_bytes, completion_key, const_cast<OverlappedEx*>(ovelapped));
 }

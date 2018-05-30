@@ -28,7 +28,7 @@ public:
 	void Close();
 	bool Bind(HANDLE handle) const;
 	bool GetCompletionStatus(DWORD& number_of_bytes, OverlappedEx** ovelapped);
-	bool PostCompletionStatus(DWORD number_of_bytes, const OverlappedEx& ovelapped);
+	bool PostCompletionStatus(DWORD number_of_bytes, const OverlappedEx* ovelapped);
 
 private:
 	HANDLE iocp_handle_;

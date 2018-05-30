@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "icontent.h"
 #include "singleton.h"
 #include "iocp.h"
 #include "protocol_def.h"
@@ -9,10 +10,11 @@
 #include "tcp_socket.h"
 #include "client.h"
 
-Client::Client(WORD serial, SOCKET listen_socket)
+Client::Client(WORD serial, SOCKET listen_socket, const shared_ptr<iContent>& content)
 	: serial_(serial)
 	, sending_(false)
 	, listen_socket_(listen_socket)
+	, content_(content)
 {
 	send_pool_ = shared_ptr<PacketPool>(new PacketPool);
 }
@@ -98,6 +100,7 @@ void Client::Accepted(Packet* packet)
 
 void Client::Disconnected(Packet* packet)
 {
+	PacketStorage::GetSingleton()->AddPacket(packet);
 	lock_guard<mutex> guard(disconnect_lock_);
 
 	tcp_socket_.decrement_io_count();
@@ -125,7 +128,7 @@ void Client::Received(Packet* packet, DWORD bytes)
 			return;
 		}
 
-		// ->AddPacket(split_packet) ÄÁÅÙÃ÷ Å¥¿¡ µî·Ï
+		content_->AddPacket(split_packet);
 	}
 
 	if (packet->IsCompleted() == false)
@@ -135,7 +138,7 @@ void Client::Received(Packet* packet, DWORD bytes)
 		return;
 	}
 
-	// ->AddPacket(packet) ÄÁÅÙÃ÷ Å¥¿¡ µî·Ï
+	content_->AddPacket(packet);
 
 	RequestReceiv();
 }

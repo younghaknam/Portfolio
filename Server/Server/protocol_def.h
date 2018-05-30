@@ -16,3 +16,9 @@ namespace protocol
 };
 
 // Protocol struct
+#pragma pack(push, 1)
+
+
+
+
+#pragma pack(pop)

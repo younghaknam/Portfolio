@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "irequest_io.h"
 #include "icompleted_io.h"
+#include "icontent.h"
 #include "iocp.h"
 #include "protocol_def.h"
 #include "packet_def.h"
@@ -20,10 +21,11 @@ ClientManager::~ClientManager()
 {
 }
 
-void ClientManager::Initialize(SOCKET listen_socket, const shared_ptr<Iocp>& io_iocp)
+void ClientManager::Initialize(SOCKET listen_socket, const shared_ptr<Iocp>& io_iocp, const shared_ptr<iContent>& content)
 {
 	listen_socket_ = listen_socket;
 	io_iocp_ = io_iocp;
+	content_ = content;
 }
 
 bool ClientManager::Start(WORD client_count)
@@ -35,7 +37,7 @@ bool ClientManager::Start(WORD client_count)
 
 	for (WORD client_serial = 0; client_serial < client_count_; client_serial++)
 	{
-		auto client = shared_ptr<Client>(new Client(client_serial, listen_socket_));
+		auto client = shared_ptr<Client>(new Client(client_serial, listen_socket_, content_));
 		if (client->RequestAccept() == false)
 			return false;
 

@@ -152,6 +152,8 @@
     <ClInclude Include="client_acceptor.h" />
     <ClInclude Include="client_io_worker.h" />
     <ClInclude Include="client_manager.h" />
+    <ClInclude Include="content_worker.h" />
+    <ClInclude Include="icontent.h" />
     <ClInclude Include="iocp.h" />
     <ClInclude Include="icompleted_io.h" />
     <ClInclude Include="io_engine.h" />
@@ -161,6 +163,8 @@
     <ClInclude Include="packet_pool.h" />
     <ClInclude Include="packet_storage.h" />
     <ClInclude Include="protocol_def.h" />
+    <ClInclude Include="protocol_handling.h" />
+    <ClInclude Include="server_content.h" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -172,12 +176,15 @@
     <ClCompile Include="client_acceptor.cpp" />
     <ClCompile Include="client_io_worker.cpp" />
     <ClCompile Include="client_manager.cpp" />
+    <ClCompile Include="content_worker.cpp" />
     <ClCompile Include="iocp.cpp" />
     <ClCompile Include="io_engine.cpp" />
     <ClCompile Include="packet.cpp" />
     <ClCompile Include="packet_pool.cpp" />
     <ClCompile Include="packet_storage.cpp" />
+    <ClCompile Include="protocol_handling.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="server_content.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
