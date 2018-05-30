@@ -31,6 +31,12 @@
     <Filter Include="소스 파일\공통\프로토콜">
       <UniqueIdentifier>{55c17ba3-68b2-4d10-86ee-a6777be3c57e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\컨텐츠\유저">
+      <UniqueIdentifier>{5c5ee8bb-82b1-4944-8359-73e4f4bd3e7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\컨텐츠\컨텐츠 프로토콜">
+      <UniqueIdentifier>{40d4f32f-d5e4-4240-80be-628c26e853ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -99,6 +105,18 @@
     <ClInclude Include="protocol_handling.h">
       <Filter>소스 파일\컨텐츠</Filter>
     </ClInclude>
+    <ClInclude Include="iprotocol.h">
+      <Filter>소스 파일\컨텐츠</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol_network_io.h">
+      <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
+    </ClInclude>
+    <ClInclude Include="user_manager.h">
+      <Filter>소스 파일\컨텐츠\유저</Filter>
+    </ClInclude>
+    <ClInclude Include="user.h">
+      <Filter>소스 파일\컨텐츠\유저</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -148,6 +166,15 @@
     </ClCompile>
     <ClCompile Include="protocol_handling.cpp">
       <Filter>소스 파일\컨텐츠</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol_network_io.cpp">
+      <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
+    </ClCompile>
+    <ClCompile Include="user_manager.cpp">
+      <Filter>소스 파일\컨텐츠\유저</Filter>
+    </ClCompile>
+    <ClCompile Include="user.cpp">
+      <Filter>소스 파일\컨텐츠\유저</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

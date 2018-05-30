@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "icontent.h"
+#include "iprotocol.h"
 #include "iocp.h"
 #include "protocol_def.h"
 #include "packet_def.h"
@@ -15,8 +16,10 @@ ContentWorker::~ContentWorker()
 {
 }
 
-bool ContentWorker::Start()
+bool ContentWorker::Start(const shared_ptr<iProtocol>& protocol)
 {
+	protocol_ = protocol;
+
 	byte thread_count = 1;
 	if (WorkerThread::Start(thread_count) == false)
 		return false;
@@ -37,5 +40,11 @@ bool ContentWorker::AddPacket(const Packet* packet)
 
 void ContentWorker::OnReceived(const void* packet, const DWORD bytes)
 {
+	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
+	if (packet_ptr->get_io_bytes() != static_cast<WORD>(bytes))
+	{
+		// log
+	}
 
+	protocol_->Dispatch(packet_ptr);
 }

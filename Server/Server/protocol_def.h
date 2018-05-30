@@ -2,17 +2,28 @@
 
 namespace protocol
 {
-	enum  Category : WORD
-	{
-		kCategoryNone = 0,
-		kCategoryMax = 65535,
-	};
-
 	enum PacketID : WORD
 	{
 		kPacketIDNone = 0,
-		kPacketIDMax = 65535,
+		kPacketIDMax,
 	};
+
+	enum  Category : WORD
+	{
+		kNetworkIO,
+		kMax,
+	};
+
+	namespace network_io
+	{
+		enum ID : WORD
+		{
+			kIO2Con_Connect,
+			kIO2Con_Disconnect,
+			kMax,
+		};
+	};
+
 };
 
 // Protocol struct
