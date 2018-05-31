@@ -20,9 +20,10 @@ bool UserManager::Start(WORD user_count, const shared_ptr<iRequestIO>& request_i
 	user_count_ = user_count;
 	request_io_ = request_io;
 
-	for (WORD user_serial = 0; user_serial < user_count_; user_serial++)
+	for (WORD client_serial = 0; client_serial < user_count_; client_serial++)
 	{
-		auto user = shared_ptr<User>(new User());
+		auto user = shared_ptr<User>(new User(client_serial, request_io_));
+		user->Reset();
 		users_.push_back(user);
 	}
 
@@ -34,15 +35,15 @@ void UserManager::Stop()
 
 }
 
-bool UserManager::IsValidSerial(WORD user_serial)
+bool UserManager::IsValidSerial(WORD client_serial)
 {
-	if (user_count_ <= user_serial)
+	if (user_count_ <= client_serial)
 		return false;
 
 	return true;
 }
 
-shared_ptr<User>& UserManager::GetUser(WORD user_serial)
+shared_ptr<User>& UserManager::GetUser(WORD client_serial)
 {
-	return users_[user_serial];
+	return users_[client_serial];
 }

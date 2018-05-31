@@ -16,6 +16,7 @@ public:
 	bool Start(WORD client_count);
 	void Stop();
 
+	virtual bool RequestAccept(WORD client_serial);
 	virtual bool RequestDisconnect(WORD client_serial);
 	virtual bool RequestSend(const void* packet);
 

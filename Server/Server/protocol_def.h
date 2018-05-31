@@ -2,11 +2,7 @@
 
 namespace protocol
 {
-	enum PacketID : WORD
-	{
-		kPacketIDNone = 0,
-		kPacketIDMax,
-	};
+	typedef WORD ID;
 
 	enum  Category : WORD
 	{
@@ -18,8 +14,8 @@ namespace protocol
 	{
 		enum ID : WORD
 		{
-			kIO2Con_Connect,
-			kIO2Con_Disconnect,
+			kIO2Content_Connected,
+			kIO2Content_Disconnected,
 			kMax,
 		};
 	};

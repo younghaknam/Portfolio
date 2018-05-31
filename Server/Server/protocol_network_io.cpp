@@ -11,12 +11,12 @@ ProtocolNetworkIO::~ProtocolNetworkIO()
 {
 }
 
-void ProtocolNetworkIO::IO2Con_Connect(shared_ptr<User>& user, const Packet* packet)
+void ProtocolNetworkIO::IO2Content_Connected(shared_ptr<User>& user, const Packet* packet)
 {
 
 }
 
-void ProtocolNetworkIO::IO2Con_Disconnect(shared_ptr<User>& user, const Packet* packet)
+void ProtocolNetworkIO::IO2Content_Disconnected(shared_ptr<User>& user, const Packet* packet)
 {
 
 }

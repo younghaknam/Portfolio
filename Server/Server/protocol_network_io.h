@@ -9,7 +9,7 @@ public:
 	ProtocolNetworkIO();
 	~ProtocolNetworkIO();
 
-	static void IO2Con_Connect(shared_ptr<User>& user, const Packet* packet);
-	static void IO2Con_Disconnect(shared_ptr<User>& user, const Packet* packet);
+	static void IO2Content_Connected(shared_ptr<User>& user, const Packet* packet);
+	static void IO2Content_Disconnected(shared_ptr<User>& user, const Packet* packet);
 
 };

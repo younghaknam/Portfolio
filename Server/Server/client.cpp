@@ -46,7 +46,11 @@ bool Client::RequestDisconnect()
 	ReturnSendPackets();
 
 	if (tcp_socket_.get_io_count() == 0)
-		RequestAccept();
+	{
+		auto packet = GetPacket();
+		packet->SetProtocol(protocol::Category::kNetworkIO, protocol::network_io::kIO2Content_Disconnected);
+		content_->AddPacket(packet);
+	}
 
 	return true;
 }
@@ -89,13 +93,10 @@ void Client::Accepted(Packet* packet)
 {
 	tcp_socket_.decrement_io_count();
 
-	packet->Initialize();
-	packet->set_client_serial(serial_);
-	if (tcp_socket_.RequestReceiv(packet) == false)
-	{
-		PacketStorage::GetSingleton()->AddPacket(packet);
-		RequestDisconnect();
-	}
+	packet->SetProtocol(protocol::Category::kNetworkIO, protocol::network_io::kIO2Content_Connected);
+	content_->AddPacket(packet);
+
+	RequestReceiv();
 }
 
 void Client::Disconnected(Packet* packet)
@@ -108,7 +109,11 @@ void Client::Disconnected(Packet* packet)
 	ReturnSendPackets();
 
 	if (tcp_socket_.get_io_count() == 0)
-		RequestAccept();
+	{
+		auto packet = GetPacket();
+		packet->SetProtocol(protocol::Category::kNetworkIO, protocol::network_io::kIO2Content_Disconnected);
+		content_->AddPacket(packet);
+	}
 }
 
 void Client::Received(Packet* packet, DWORD bytes)

@@ -7,7 +7,7 @@ public:
 	~Packet();
 
 	void Initialize();
-	void SetProtocolID(protocol::Category category, protocol::PacketID packet_id);
+	void SetProtocol(protocol::Category category, protocol::ID packet_id);
 	bool SetData(const void* data, WORD size);
 	bool GetData(void* data, WORD size);
 	WORD GetSize();

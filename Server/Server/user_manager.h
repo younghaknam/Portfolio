@@ -11,8 +11,8 @@ public:
 
 	bool Start(WORD user_count, const shared_ptr<iRequestIO>& request_io);
 	void Stop();
-	bool IsValidSerial(WORD user_serial);
-	shared_ptr<User>& GetUser(WORD user_serial);
+	bool IsValidSerial(WORD client_serial);
+	shared_ptr<User>& GetUser(WORD client_serial);
 
 private:
 	WORD user_count_;

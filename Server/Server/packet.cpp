@@ -29,7 +29,7 @@ void Packet::Initialize()
 	overlapped_.packet = this;
 }
 
-void Packet::SetProtocolID(protocol::Category category, protocol::PacketID packet_id)
+void Packet::SetProtocol(protocol::Category category, protocol::ID packet_id)
 {
 	header_->category = category;
 	header_->packet_id = packet_id;

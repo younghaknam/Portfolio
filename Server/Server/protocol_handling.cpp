@@ -5,6 +5,7 @@
 #include "packet_def.h"
 #include "iocp.h"
 #include "packet.h"
+#include "packet_storage.h"
 #include "user.h"
 #include "user_manager.h"
 #include "protocol_network_io.h"
@@ -39,8 +40,8 @@ void ProtocolHandling::Bind()
 void ProtocolHandling::BindNetworkIO()
 {
 	FunctionVector functions;
-	functions[protocol::network_io::ID::kIO2Con_Connect] = ProtocolNetworkIO::IO2Con_Connect;
-	functions[protocol::network_io::ID::kIO2Con_Disconnect] = ProtocolNetworkIO::IO2Con_Disconnect;
+	functions[protocol::network_io::ID::kIO2Content_Connected] = ProtocolNetworkIO::IO2Content_Connected;
+	functions[protocol::network_io::ID::kIO2Content_Disconnected] = ProtocolNetworkIO::IO2Content_Disconnected;
 
 	category_[protocol::Category::kNetworkIO] = functions;
 }
@@ -60,6 +61,7 @@ void ProtocolHandling::Dispatch(const Packet* packet)
 		return;
 
 	auto user = UserManager::GetSingleton()->GetUser(packet_ptr->get_client_serial());
-
 	category_[header->category][header->packet_id](user, packet);
+
+	PacketStorage::GetSingleton()->AddPacket(packet);
 }

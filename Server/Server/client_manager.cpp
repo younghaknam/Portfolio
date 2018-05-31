@@ -38,9 +38,6 @@ bool ClientManager::Start(WORD client_count)
 	for (WORD client_serial = 0; client_serial < client_count_; client_serial++)
 	{
 		auto client = shared_ptr<Client>(new Client(client_serial, listen_socket_, content_));
-		if (client->RequestAccept() == false)
-			return false;
-
 		clients_.push_back(client);
 	}
 
@@ -53,6 +50,15 @@ void ClientManager::Stop()
 	{
 		client->RequestDisconnect();
 	}
+}
+
+bool ClientManager::RequestAccept(WORD client_serial)
+{
+	shared_ptr<Client> client(nullptr);
+	if (GetClient(client_serial, client) == false)
+		return false;
+
+	return client->RequestAccept();
 }
 
 bool ClientManager::RequestDisconnect(WORD client_serial)

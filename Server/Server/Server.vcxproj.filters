@@ -117,6 +117,9 @@
     <ClInclude Include="user.h">
       <Filter>소스 파일\컨텐츠\유저</Filter>
     </ClInclude>
+    <ClInclude Include="protocol_user.h">
+      <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -175,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="user.cpp">
       <Filter>소스 파일\컨텐츠\유저</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol_user.cpp">
+      <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
