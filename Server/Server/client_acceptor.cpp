@@ -74,8 +74,7 @@ bool ClientAcceptor::Listen()
 	sock_addr.sin_addr.s_addr = INADDR_ANY;
 	if (ip_.compare(L"0.0.0.0") != 0)
 	{
-		int sock_addr_size = sizeof(SOCKADDR_IN);
-		if (WSAStringToAddressW(const_cast<LPWSTR>(ip_.c_str()), AF_INET, nullptr, reinterpret_cast<LPSOCKADDR>(&sock_addr), &sock_addr_size) != 0)
+		if (InetPtonW(AF_INET, ip_.c_str(), reinterpret_cast<void*>(&sock_addr.sin_addr)) != 1)
 			return false;
 	}
 

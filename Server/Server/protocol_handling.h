@@ -12,7 +12,6 @@ public:
 	typedef vector<tr1::function<void(shared_ptr<User>& user, const Packet* packet)>> FunctionVector;
 
 	bool Start();
-	void Stop();
 
 	virtual void Dispatch(const Packet* packet);
 

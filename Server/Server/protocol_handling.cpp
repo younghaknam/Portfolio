@@ -28,11 +28,6 @@ bool ProtocolHandling::Start()
 	return true;
 }
 
-void ProtocolHandling::Stop()
-{
-
-}
-
 void ProtocolHandling::Bind()
 {
 	BindEngineIO();
@@ -68,7 +63,7 @@ void ProtocolHandling::Dispatch(const Packet* packet)
 	if (header->category > protocol::Category::kMax || header->packet_id > category_[header->category].size())
 		return;
 
-	if (UserManager::GetSingleton()->IsValidSerial(packet_ptr->get_client_serial()))
+	if (UserManager::GetSingleton()->IsValidSerial(packet_ptr->get_client_serial()) == false)
 		return;
 
 	auto user = UserManager::GetSingleton()->GetUser(packet_ptr->get_client_serial());

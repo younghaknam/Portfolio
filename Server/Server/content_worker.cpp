@@ -38,6 +38,23 @@ bool ContentWorker::AddPacket(const Packet* packet)
 	return get_iocp()->PostCompletionStatus(packet_ptr->get_io_bytes(), packet_ptr->get_overlapped());
 }
 
+void ContentWorker::Dispatch(const Packet* packet)
+{
+	protocol_->Dispatch(packet);
+}
+
+void ContentWorker::OnAccepted(const void* packet)
+{
+	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
+	Dispatch(packet_ptr);
+}
+
+void ContentWorker::OnDisconnected(const void* packet)
+{
+	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
+	Dispatch(packet_ptr);
+}
+
 void ContentWorker::OnReceived(const void* packet, const DWORD bytes)
 {
 	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
@@ -46,5 +63,16 @@ void ContentWorker::OnReceived(const void* packet, const DWORD bytes)
 		// log
 	}
 
-	protocol_->Dispatch(packet_ptr);
+	Dispatch(packet_ptr);
+}
+
+void ContentWorker::OnSent(const void* packet, const DWORD bytes)
+{
+	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
+	if (packet_ptr->get_io_bytes() != static_cast<WORD>(bytes))
+	{
+		// log
+	}
+
+	Dispatch(packet_ptr);
 }

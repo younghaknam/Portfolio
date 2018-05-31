@@ -38,11 +38,10 @@ bool ServerContent::Start(WORD max_user, const shared_ptr<iRequestIO>& request_i
 
 void ServerContent::Stop()
 {
+	UserManager::GetSingleton()->Stop();
+
 	if (content_worker_)
 		content_worker_->Stop();
-
-	if (protocol_handling_)
-		protocol_handling_->Stop();
 }
 
 shared_ptr<iContent>ServerContent::GetiContent()

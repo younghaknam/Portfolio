@@ -20,4 +20,3 @@ private:
 	shared_ptr<ProtocolHandling> protocol_handling_;
 	shared_ptr<iRequestIO> request_io_;
 };
-
