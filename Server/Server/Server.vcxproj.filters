@@ -108,9 +108,6 @@
     <ClInclude Include="iprotocol.h">
       <Filter>소스 파일\컨텐츠</Filter>
     </ClInclude>
-    <ClInclude Include="protocol_network_io.h">
-      <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
-    </ClInclude>
     <ClInclude Include="user_manager.h">
       <Filter>소스 파일\컨텐츠\유저</Filter>
     </ClInclude>
@@ -118,6 +115,9 @@
       <Filter>소스 파일\컨텐츠\유저</Filter>
     </ClInclude>
     <ClInclude Include="protocol_user.h">
+      <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol_engine_io.h">
       <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
     </ClInclude>
   </ItemGroup>
@@ -170,9 +170,6 @@
     <ClCompile Include="protocol_handling.cpp">
       <Filter>소스 파일\컨텐츠</Filter>
     </ClCompile>
-    <ClCompile Include="protocol_network_io.cpp">
-      <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
-    </ClCompile>
     <ClCompile Include="user_manager.cpp">
       <Filter>소스 파일\컨텐츠\유저</Filter>
     </ClCompile>
@@ -180,6 +177,9 @@
       <Filter>소스 파일\컨텐츠\유저</Filter>
     </ClCompile>
     <ClCompile Include="protocol_user.cpp">
+      <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol_engine_io.cpp">
       <Filter>소스 파일\컨텐츠\컨텐츠 프로토콜</Filter>
     </ClCompile>
   </ItemGroup>

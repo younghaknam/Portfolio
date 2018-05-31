@@ -48,7 +48,7 @@ bool Client::RequestDisconnect()
 	if (tcp_socket_.get_io_count() == 0)
 	{
 		auto packet = GetPacket();
-		packet->SetProtocol(protocol::Category::kNetworkIO, protocol::network_io::kIO2Content_Disconnected);
+		packet->SetProtocol(protocol::Category::kEngineIO, protocol::engine_io::kIO2Content_Disconnected);
 		content_->AddPacket(packet);
 	}
 
@@ -81,6 +81,7 @@ bool Client::RequestSend(const Packet* packet)
 	sending_ = true;
 	if (tcp_socket_.RequestSend(const_cast<Packet*>(packet)) == false)
 	{
+		sending_ = false;
 		PacketStorage::GetSingleton()->AddPacket(packet);
 		RequestDisconnect();
 		return false;
@@ -93,7 +94,7 @@ void Client::Accepted(Packet* packet)
 {
 	tcp_socket_.decrement_io_count();
 
-	packet->SetProtocol(protocol::Category::kNetworkIO, protocol::network_io::kIO2Content_Connected);
+	packet->SetProtocol(protocol::Category::kEngineIO, protocol::engine_io::kIO2Content_Connected);
 	content_->AddPacket(packet);
 
 	RequestReceiv();
@@ -110,9 +111,9 @@ void Client::Disconnected(Packet* packet)
 
 	if (tcp_socket_.get_io_count() == 0)
 	{
-		auto packet = GetPacket();
-		packet->SetProtocol(protocol::Category::kNetworkIO, protocol::network_io::kIO2Content_Disconnected);
-		content_->AddPacket(packet);
+		auto new_packet = GetPacket();
+		new_packet->SetProtocol(protocol::Category::kEngineIO, protocol::engine_io::kIO2Content_Disconnected);
+		content_->AddPacket(new_packet);
 	}
 }
 

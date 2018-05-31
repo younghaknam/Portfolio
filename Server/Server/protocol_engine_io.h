@@ -3,11 +3,11 @@
 class User;
 class Packet;
 
-class ProtocolNetworkIO
+class ProtocolEngineIO
 {
 public:
-	ProtocolNetworkIO();
-	~ProtocolNetworkIO();
+	ProtocolEngineIO();
+	~ProtocolEngineIO();
 
 	static void IO2Content_Connected(shared_ptr<User>& user, const Packet* packet);
 	static void IO2Content_Disconnected(shared_ptr<User>& user, const Packet* packet);

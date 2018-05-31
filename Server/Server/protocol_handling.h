@@ -18,7 +18,8 @@ public:
 
 private:
 	void Bind();
-	void BindNetworkIO();
+	void BindEngineIO();
+	void BindUser();
 
 private:
 	vector<FunctionVector> category_;

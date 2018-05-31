@@ -165,7 +165,7 @@
     <ClInclude Include="packet_storage.h" />
     <ClInclude Include="protocol_def.h" />
     <ClInclude Include="protocol_handling.h" />
-    <ClInclude Include="protocol_network_io.h" />
+    <ClInclude Include="protocol_engine_io.h" />
     <ClInclude Include="protocol_user.h" />
     <ClInclude Include="server_content.h" />
     <ClInclude Include="singleton.h" />
@@ -188,7 +188,7 @@
     <ClCompile Include="packet_pool.cpp" />
     <ClCompile Include="packet_storage.cpp" />
     <ClCompile Include="protocol_handling.cpp" />
-    <ClCompile Include="protocol_network_io.cpp" />
+    <ClCompile Include="protocol_engine_io.cpp" />
     <ClCompile Include="protocol_user.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="server_content.cpp" />

@@ -24,6 +24,7 @@ bool UserManager::Start(WORD user_count, const shared_ptr<iRequestIO>& request_i
 	{
 		auto user = shared_ptr<User>(new User(client_serial, request_io_));
 		user->Reset();
+
 		users_.push_back(user);
 	}
 
@@ -32,7 +33,10 @@ bool UserManager::Start(WORD user_count, const shared_ptr<iRequestIO>& request_i
 
 void UserManager::Stop()
 {
-
+	for (auto user : users_)
+	{
+		user->Disconnect();
+	}
 }
 
 bool UserManager::IsValidSerial(WORD client_serial)

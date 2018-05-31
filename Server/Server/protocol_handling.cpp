@@ -8,7 +8,8 @@
 #include "packet_storage.h"
 #include "user.h"
 #include "user_manager.h"
-#include "protocol_network_io.h"
+#include "protocol_engine_io.h"
+#include "protocol_user.h"
 #include "protocol_handling.h"
 
 ProtocolHandling::ProtocolHandling()
@@ -34,16 +35,26 @@ void ProtocolHandling::Stop()
 
 void ProtocolHandling::Bind()
 {
-	BindNetworkIO();
+	BindEngineIO();
+	BindUser();
 }
 
-void ProtocolHandling::BindNetworkIO()
+void ProtocolHandling::BindEngineIO()
 {
 	FunctionVector functions;
-	functions[protocol::network_io::ID::kIO2Content_Connected] = ProtocolNetworkIO::IO2Content_Connected;
-	functions[protocol::network_io::ID::kIO2Content_Disconnected] = ProtocolNetworkIO::IO2Content_Disconnected;
+	functions[protocol::engine_io::ID::kIO2Content_Connected] = ProtocolEngineIO::IO2Content_Connected;
+	functions[protocol::engine_io::ID::kIO2Content_Disconnected] = ProtocolEngineIO::IO2Content_Disconnected;
 
-	category_[protocol::Category::kNetworkIO] = functions;
+	category_[protocol::Category::kEngineIO] = functions;
+}
+
+void ProtocolHandling::BindUser()
+{
+	FunctionVector functions;
+	functions[protocol::user::ID::kC2S_LoginReq] = ProtocolUser::C2S_LoginReq;
+	functions[protocol::user::ID::kC2S_Logout] = ProtocolUser::C2S_Logout;
+
+	category_[protocol::Category::kUser] = functions;
 }
 
 void ProtocolHandling::Dispatch(const Packet* packet)
