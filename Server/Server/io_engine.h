@@ -12,7 +12,7 @@ public:
 	IOEngine();
 	~IOEngine();
 
-	bool Start(const shared_ptr<iContent>& content);
+	bool Start(WORD max_client, const shared_ptr<iContent>& content);
 	void Stop();
 	shared_ptr<iRequestIO> GetiRequestIO();
 

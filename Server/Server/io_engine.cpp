@@ -26,7 +26,7 @@ IOEngine::~IOEngine()
 {
 }
 
-bool IOEngine::Start(const shared_ptr<iContent>& content)
+bool IOEngine::Start(WORD max_client, const shared_ptr<iContent>& content)
 {
 	WSADATA wsa_data;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
@@ -34,7 +34,7 @@ bool IOEngine::Start(const shared_ptr<iContent>& content)
 
 	content_ = content;
 
-	PacketStorage::GetSingleton()->Create(10000);
+	PacketStorage::GetSingleton()->Create(max_client * 10);
 
 	if (client_acceptor_->Start(L"0.0.0.0", 15110, dynamic_pointer_cast<iCompletedIO>(client_manager_)) == false)
 		return false;
@@ -43,7 +43,7 @@ bool IOEngine::Start(const shared_ptr<iContent>& content)
 		return false;
 
 	client_manager_->Initialize(client_acceptor_->get_socket(), client_io_worker_->get_iocp(), content_);
-	if (client_manager_->Start(1000) == false)
+	if (client_manager_->Start(max_client) == false)
 		return false;
 
 	return true;

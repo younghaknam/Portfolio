@@ -23,7 +23,8 @@ bool UserManager::Start(WORD user_count, const shared_ptr<iRequestIO>& request_i
 	for (WORD client_serial = 0; client_serial < user_count_; client_serial++)
 	{
 		auto user = shared_ptr<User>(new User(client_serial, request_io_));
-		user->Reset();
+		if (user->Reset() == false)
+			return false;
 
 		users_.push_back(user);
 	}

@@ -11,7 +11,7 @@ public:
 	ServerContent();
 	~ServerContent();
 
-	bool Start(const shared_ptr<iRequestIO>& request_io);
+	bool Start(WORD max_user, const shared_ptr<iRequestIO>& request_io);
 	void Stop();
 	shared_ptr<iContent> GetiContent();
 

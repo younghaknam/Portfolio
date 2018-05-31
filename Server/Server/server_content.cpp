@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "singleton.h"
 #include "irequest_io.h"
 #include "icontent.h"
 #include "iprotocol.h"
@@ -6,6 +7,7 @@
 #include "worker_thread.h"
 #include "content_worker.h"
 #include "protocol_handling.h"
+#include "user_manager.h"
 #include "server_content.h"
 
 ServerContent::ServerContent()
@@ -18,7 +20,7 @@ ServerContent::~ServerContent()
 {
 }
 
-bool ServerContent::Start(const shared_ptr<iRequestIO>& request_io)
+bool ServerContent::Start(WORD max_user, const shared_ptr<iRequestIO>& request_io)
 {
 	request_io_ = request_io;
 
@@ -26,6 +28,9 @@ bool ServerContent::Start(const shared_ptr<iRequestIO>& request_io)
 		return false;
 
 	if (content_worker_->Start(dynamic_pointer_cast<iProtocol>(protocol_handling_)) == false)
+		return false;
+
+	if (UserManager::GetSingleton()->Start(max_user, request_io_) == false)
 		return false;
 
 	return true;

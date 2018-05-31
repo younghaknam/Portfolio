@@ -42,19 +42,19 @@ void ProtocolHandling::Bind()
 void ProtocolHandling::BindEngineIO()
 {
 	FunctionVector functions;
-	functions[protocol::engine_io::ID::kIO2Content_Connected] = ProtocolEngineIO::IO2Content_Connected;
-	functions[protocol::engine_io::ID::kIO2Content_Disconnected] = ProtocolEngineIO::IO2Content_Disconnected;
+	functions.push_back(ProtocolEngineIO::IO2Content_Connected);
+	functions.push_back(ProtocolEngineIO::IO2Content_Disconnected);
 
-	category_[protocol::Category::kEngineIO] = functions;
+	category_.push_back(functions);
 }
 
 void ProtocolHandling::BindUser()
 {
 	FunctionVector functions;
-	functions[protocol::user::ID::kC2S_LoginReq] = ProtocolUser::C2S_LoginReq;
-	functions[protocol::user::ID::kC2S_Logout] = ProtocolUser::C2S_Logout;
+	functions.push_back(ProtocolUser::C2S_LoginReq);
+	functions.push_back(ProtocolUser::C2S_Logout);
 
-	category_[protocol::Category::kUser] = functions;
+	category_.push_back(functions);
 }
 
 void ProtocolHandling::Dispatch(const Packet* packet)
