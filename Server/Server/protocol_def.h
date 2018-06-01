@@ -52,4 +52,9 @@ struct S2CLoginAns
 	byte result;
 };
 
+struct C2SLogout
+{
+	byte request;
+};
+
 #pragma pack(pop)

@@ -9,7 +9,7 @@ public:
 	ProtocolHandling();
 	~ProtocolHandling();
 
-	typedef vector<tr1::function<void(shared_ptr<User>& user, const Packet* packet)>> FunctionVector;
+	typedef unordered_map<WORD, tr1::function<void(shared_ptr<User>& user, const Packet* packet)>> FunctionMap;
 
 	bool Start();
 
@@ -21,5 +21,5 @@ private:
 	void BindUser();
 
 private:
-	vector<FunctionVector> category_;
+	vector<FunctionMap> category_;
 };
