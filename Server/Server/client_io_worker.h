@@ -14,10 +14,10 @@ public:
 	bool Bind(SOCKET socket);
 
 protected:
-	virtual void OnAccepted(const void* packet) { if (packet) return; };
-	virtual void OnDisconnected(const void* packet);
-	virtual void OnReceived(const void* packet, const DWORD bytes);
-	virtual void OnSent(const void* packet, const DWORD bytes);
+	void OnAccepted(const void* packet) { if (packet) return; };
+	void OnDisconnected(const void* packet);
+	void OnReceived(const void* packet, const DWORD bytes);
+	void OnSent(const void* packet, const DWORD bytes);
 
 private:
 	shared_ptr<iCompletedIO> completed_io_;

@@ -51,7 +51,7 @@ void ClientAcceptor::OnAccepted(const void* packet)
 	if (packet == nullptr)
 		return	;
 
-	completed_io_->OnAccepted(packet);
+	completed_io_->Accepted(packet);
 }
 
 bool ClientAcceptor::Listen()

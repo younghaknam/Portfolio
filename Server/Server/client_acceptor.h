@@ -15,10 +15,10 @@ public:
 	const SOCKET get_socket() { return socket_; }
 
 protected:
-	virtual void OnAccepted(const void* packet);
-	virtual void OnDisconnected(const void* packet) { if (packet) return; }
-	virtual void OnReceived(const void* packet, const DWORD bytes) { if (packet || bytes) return; }
-	virtual void OnSent(const void* packet, const DWORD bytes) { if (packet || bytes) return; }
+	void OnAccepted(const void* packet);
+	void OnDisconnected(const void* packet) { if (packet) return; }
+	void OnReceived(const void* packet, const DWORD bytes) { if (packet || bytes) return; }
+	void OnSent(const void* packet, const DWORD bytes) { if (packet || bytes) return; }
 
 private:
 	bool Listen();

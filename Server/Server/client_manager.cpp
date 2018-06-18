@@ -80,7 +80,7 @@ bool ClientManager::RequestSend(const void* packet)
 	return client->RequestSend(packet_ptr);
 }
 
-void ClientManager::OnAccepted(const void* packet)
+void ClientManager::Accepted(const void* packet)
 {
 	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
 	shared_ptr<Client> client(nullptr);
@@ -91,7 +91,7 @@ void ClientManager::OnAccepted(const void* packet)
 	client->Accepted(packet_ptr);
 }
 
-void ClientManager::OnDisconnected(const void* packet)
+void ClientManager::Disconnected(const void* packet)
 {
 	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
 	shared_ptr<Client> client(nullptr);
@@ -101,7 +101,7 @@ void ClientManager::OnDisconnected(const void* packet)
 	client->Disconnected(packet_ptr);
 }
 
-void ClientManager::OnReceived(const void* packet, const DWORD bytes)
+void ClientManager::Received(const void* packet, const DWORD bytes)
 {
 	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
 	shared_ptr<Client> client(nullptr);
@@ -111,7 +111,7 @@ void ClientManager::OnReceived(const void* packet, const DWORD bytes)
 	client->Received(packet_ptr, bytes);
 }
 
-void ClientManager::OnSent(const void* packet, const DWORD bytes)
+void ClientManager::Sent(const void* packet, const DWORD bytes)
 {
 	auto packet_ptr = reinterpret_cast<Packet*>(const_cast<void*>(packet));
 	shared_ptr<Client> client(nullptr);

@@ -16,14 +16,16 @@ public:
 	bool Start(WORD client_count);
 	void Stop();
 
-	virtual bool RequestAccept(WORD client_serial);
-	virtual bool RequestDisconnect(WORD client_serial);
-	virtual bool RequestSend(const void* packet);
+	// iRequestIO
+	bool RequestAccept(WORD client_serial);
+	bool RequestDisconnect(WORD client_serial);
+	bool RequestSend(const void* packet);
 
-	virtual void OnAccepted(const void* packet);
-	virtual void OnDisconnected(const void* packet);
-	virtual void OnReceived(const void* packet, const DWORD bytes);
-	virtual void OnSent(const void* packet, const DWORD bytes);
+	// iCompletedIO
+	void Accepted(const void* packet);
+	void Disconnected(const void* packet);
+	void Received(const void* packet, const DWORD bytes);
+	void Sent(const void* packet, const DWORD bytes);
 
 private:
 	bool GetClient(WORD serial, shared_ptr<Client>& client);

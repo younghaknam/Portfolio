@@ -13,7 +13,8 @@ public:
 
 	bool Start();
 
-	virtual void Dispatch(const Packet* packet);
+	// iProtocol
+	void Dispatch(const Packet* packet);
 
 private:
 	void Bind();

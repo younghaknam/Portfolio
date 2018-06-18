@@ -14,15 +14,15 @@ public:
 	bool Start(const shared_ptr<iProtocol>& protocol);
 	void Stop();
 
-	virtual bool AddPacket(const Packet* packet);
+	bool AddPacket(const Packet* packet);
 private:
 	void Dispatch(const Packet* packet);
 
 protected:
-	virtual void OnAccepted(const void* packet);
-	virtual void OnDisconnected(const void* packet);
-	virtual void OnReceived(const void* packet, const DWORD bytes);
-	virtual void OnSent(const void* packet, const DWORD bytes);
+	void OnAccepted(const void* packet);
+	void OnDisconnected(const void* packet);
+	void OnReceived(const void* packet, const DWORD bytes);
+	void OnSent(const void* packet, const DWORD bytes);
 
 private:
 	shared_ptr<iProtocol> protocol_;
